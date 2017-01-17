@@ -1,5 +1,9 @@
 package com.audiowave.tverdakhleb.command;
 
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import javax.servlet.http.HttpServletRequest;
 
 public enum CommandType {
@@ -8,6 +12,7 @@ public enum CommandType {
         public ICommandAction getCommand() {return new CommandChangeLanguage();}
     };
 
+    private static final Logger LOGGER = LogManager.getLogger();
     private static final String COMMAND = "command";
 
     abstract public ICommandAction getCommand();
@@ -19,8 +24,12 @@ public enum CommandType {
         if(action == null || action.isEmpty()){
             return command;
         }
-        CommandType enumCommand = CommandType.valueOf(action.toUpperCase());
-        command = enumCommand.getCommand();
+        try {
+            CommandType enumCommand = CommandType.valueOf(action.toUpperCase());
+            command = enumCommand.getCommand();
+        } catch (IllegalArgumentException ex){
+            LOGGER.log(Level.ERROR, ex);
+        }
         return command;
     }
 }

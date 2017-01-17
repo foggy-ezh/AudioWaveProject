@@ -1,20 +1,29 @@
 package com.audiowave.tverdakhleb.command;
 
+import com.audiowave.tverdakhleb.manager.ConfigurationManager;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.io.File;
 import java.io.IOException;
 
 public class CommandChangeLanguage implements ICommandAction {
 
-    private  static final String JSP_PATH = "jspPath";
+    private static final String PATH_PAGE_MAIN = "path.page.main";
     private static final String PARAM_LANGUAGE = "lang";
     private static final String DEFAULT_LOCALE_VALUE = "en_US";
 
     @Override
     public String execute(HttpServletRequest request) throws IOException, ServletException {
+
+/*
+        File fileSaveDir = new File("C:/music/text.txt");
+        fileSaveDir.createNewFile();
+        System.out.println(fileSaveDir.toURI() + fileSaveDir.toString().replace("C:", "/project"));*/
+
+
         String language = request.getParameter(PARAM_LANGUAGE);
-        System.out.println(language);
         HttpSession session = request.getSession();
 
         if(language != null) {
@@ -23,6 +32,7 @@ public class CommandChangeLanguage implements ICommandAction {
             session.setAttribute(PARAM_LANGUAGE, DEFAULT_LOCALE_VALUE);
         }
 
-        return request.getParameter(JSP_PATH);
+        EmptyCommand com = new EmptyCommand();
+        return com.execute(request);
     }
 }
