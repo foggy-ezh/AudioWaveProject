@@ -6,7 +6,8 @@ import com.audiowave.tverdakhleb.exception.DBConnectionException;
 import com.audiowave.tverdakhleb.exception.ServiceException;
 
 public class AbstractService {
-    private void restorePoolConnection(ConnectionPool pool, ProxyConnection connection) throws ServiceException {
+    
+    protected void restorePoolConnection(ConnectionPool pool, ProxyConnection connection) throws ServiceException {
         if (pool != null && connection != null) {
             try {
                 pool.restoreConnection(connection);

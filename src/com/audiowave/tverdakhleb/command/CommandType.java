@@ -7,6 +7,7 @@ import org.apache.logging.log4j.Logger;
 import javax.servlet.http.HttpServletRequest;
 
 public enum CommandType {
+
     CHANGE_LANGUAGE {
         @Override
         public ICommandAction getCommand() {return new CommandChangeLanguage();}
@@ -14,13 +15,22 @@ public enum CommandType {
 
     private static final Logger LOGGER = LogManager.getLogger();
     private static final String COMMAND = "command";
+    private static final String LAST_COMMAND = "last_command";
 
     abstract public ICommandAction getCommand();
 
     static public ICommandAction getCurrentCommand(HttpServletRequest request){
-        ICommandAction command = new EmptyCommand();
-
         String action = request.getParameter(COMMAND);
+        return defineCommand(action);
+    }
+
+    static public ICommandAction getLastCommand(HttpServletRequest request){
+        String action = request.getParameter(LAST_COMMAND);
+        return defineCommand(action);
+    }
+
+    static private ICommandAction defineCommand(String action){
+        ICommandAction command = new EmptyCommand();
         if(action == null || action.isEmpty()){
             return command;
         }
@@ -31,5 +41,6 @@ public enum CommandType {
             LOGGER.log(Level.ERROR, ex);
         }
         return command;
+
     }
 }

@@ -6,6 +6,8 @@ public class Album extends Entity {
     private int releaseYear;
     private String coverURI;
     private Boolean blocked;
+    private long singerID;
+    private String singerName;
 
     public Album(long id, String albumName, int releaseYear, String coverURI, Boolean blocked) {
         super(id);
@@ -47,6 +49,22 @@ public class Album extends Entity {
         this.blocked = blocked;
     }
 
+    public long getSingerID() {
+        return singerID;
+    }
+
+    public void setSingerID(long singerID) {
+        this.singerID = singerID;
+    }
+
+    public String getSingerName() {
+        return singerName;
+    }
+
+    public void setSingerName(String singerName) {
+        this.singerName = singerName;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o){ return true;}
@@ -58,7 +76,9 @@ public class Album extends Entity {
         if (releaseYear != album.releaseYear){ return false;}
         if (albumName != null ? !albumName.equals(album.albumName) : album.albumName != null){ return false;}
         if (coverURI != null ? !coverURI.equals(album.coverURI) : album.coverURI != null){ return false;}
-        return blocked != null ? blocked.equals(album.blocked) : album.blocked == null;
+        if (singerID != album.singerID){ return false;}
+        if (blocked != null ? !blocked.equals(album.blocked) : album.blocked != null){ return false;}
+        return singerName != null ? singerName.equals(album.singerName) : album.singerName == null;
     }
 
     @Override
@@ -68,6 +88,8 @@ public class Album extends Entity {
         result = 31 * result + releaseYear;
         result = 31 * result + (coverURI != null ? coverURI.hashCode() : 0);
         result = 31 * result + (blocked != null ? blocked.hashCode() : 0);
+        result = 31 * result + (int) (singerID ^ (singerID >>> 32));
+        result = 31 * result + (singerName != null ? singerName.hashCode() : 0);
         return result;
     }
 }

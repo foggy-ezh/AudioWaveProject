@@ -20,6 +20,7 @@ public class EmptyCommand implements ICommandAction {
         HomePageService service = new HomePageService();
         try {
             request.setAttribute("albums", service.getPopularAlbum());
+            request.setAttribute("audiotracks", service.getPopularAudiotrack());
         } catch (ServiceException e) {
             LOG.log(Level.ERROR,e);
         }

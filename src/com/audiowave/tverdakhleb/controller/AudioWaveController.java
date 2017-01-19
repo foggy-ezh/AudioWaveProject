@@ -3,9 +3,6 @@ package com.audiowave.tverdakhleb.controller;
 import com.audiowave.tverdakhleb.command.CommandType;
 import com.audiowave.tverdakhleb.command.ICommandAction;
 import com.audiowave.tverdakhleb.dbconnection.ConnectionPool;
-import org.apache.logging.log4j.Level;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -14,8 +11,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.sql.DriverManager;
-import java.sql.SQLException;
 
 
 @WebServlet("/AudioWave")

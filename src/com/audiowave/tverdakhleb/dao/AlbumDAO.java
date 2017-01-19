@@ -4,6 +4,7 @@ import com.audiowave.tverdakhleb.dbconnection.ProxyConnection;
 import com.audiowave.tverdakhleb.entity.Album;
 import com.audiowave.tverdakhleb.exception.DAOException;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -18,6 +19,7 @@ public class AlbumDAO extends AbstractDAO<Album> {
     private static final String COLUMN_COVER = "album_cover";
     private static final String COLUMN_BLOCKED = "album_blocked";
 
+    private static final String SQL_SELECT_BY_ID = "SELECT * FROM album WHERE album_id=?";
     private static final String SQL_SELECT_POPULAR ="SELECT * FROM album as album1" +
             " inner join( select album_id from audio_track as audio1 " +
             "inner join (select audio_track_id from (select count(user_id) as count, audio_track_id from user_has_audio_track " +
@@ -28,15 +30,6 @@ public class AlbumDAO extends AbstractDAO<Album> {
         super(connection);
     }
 
-    @Override
-    public List<Album> findAll() throws DAOException {
-        return null;
-    }
-
-    @Override
-    public Album findEntityById(long id) throws DAOException {
-        return null;
-    }
 
     @Override
     public boolean remove(long id) throws DAOException {
@@ -74,6 +67,10 @@ public class AlbumDAO extends AbstractDAO<Album> {
                 throw new DAOException(e);
             }
         }
+    }
+
+    public Album findAlbumById(long id) throws DAOException {
+        return findEntityById(SQL_SELECT_BY_ID, id).get(0);
     }
 
     public List<Album> findPopularAlbums() throws DAOException {

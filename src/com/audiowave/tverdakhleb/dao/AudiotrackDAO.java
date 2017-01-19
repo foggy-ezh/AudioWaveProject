@@ -6,8 +6,6 @@ import com.audiowave.tverdakhleb.exception.DAOException;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
 import java.util.List;
 
 public class AudiotrackDAO extends AbstractDAO<Audiotrack> {
@@ -38,21 +36,13 @@ public class AudiotrackDAO extends AbstractDAO<Audiotrack> {
             "                            COUNT DESC ) AS audio2) AS audio3\n" +
             "        ON\n" +
             "            audio1.audio_track_id = audio3.audio_track_id\n" +
+//            "            WHERE audio1.audio_track_blocked = 0"+
             "            LIMIT 9;";
 
     public AudiotrackDAO(ProxyConnection connection) {
         super(connection);
     }
 
-    @Override
-    public List<Audiotrack> findAll() throws DAOException {
-        return null;
-    }
-
-    @Override
-    public Audiotrack findEntityById(long id) throws DAOException {
-        return null;
-    }
 
     @Override
     public boolean remove(long id) throws DAOException {

@@ -8,13 +8,18 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
+    <link rel="shortcut icon" href="../media/images/title_logo.png">
 </head>
 <body>
-</div>
-<div class=" text-align-center application_footer footer " >
+
+<div class=" text-align-center application_footer footer ">
     &copy;Copyright
-    <img class="imgLang usa" src="../media/images/usa.png" alt="alt"></a>
-    <img class="imgLang rus"  src="../media/images/russia.png"   alt="alt"></a>
+    <a href="../AudioWave?command=change_language&lang=en_US"/>
+        <img class="imgLang usa" src="../media/images/usa.png" alt="alt">
+    </a>
+    <a href="../AudioWave?command=change_language&lang=ru_RU">
+        <img class="imgLang rus" src="../media/images/russia.png" alt="alt">
+    </a>
 </div>
 </div>
 
@@ -28,16 +33,15 @@
 <script src="js/script.js"></script>
 <script src="js/audioplayer.js"></script>
 <script>
-    $( function()
-    {
-        $( 'audio' ).audioPlayer();
+    $(function () {
+        $('audio').audioPlayer();
     });
 </script>
 <script type="text/javascript">
     $("#myModal").modal('show');
 </script>
 <script type="text/javascript">
-    $('#myModall').on('show.bs.modal', function() {
+    $('#myModall').on('show.bs.modal', function () {
         $("#myModal").modal('hide');
     })
 </script>
