@@ -22,7 +22,7 @@ public class AlbumDAO extends AbstractDAO<Album> {
             " inner join( select album_id from audio_track as audio1 " +
             "inner join (select audio_track_id from (select count(user_id) as count, audio_track_id from user_has_audio_track " +
             "group by audio_track_id order by count desc ) as audio2) as audio3 on audio1.audio_track_id = audio3.audio_track_id" +
-            " group by audio1.album_id) as album2 on album1.album_id = album2.album_id where album1.album_blocked != 1 LIMIT 5;\n";
+            " group by audio1.album_id) as album2 on album1.album_id = album2.album_id where album1.album_blocked != 1 LIMIT 4;\n";
 
     public AlbumDAO(ProxyConnection connection) {
         super(connection);
@@ -77,17 +77,6 @@ public class AlbumDAO extends AbstractDAO<Album> {
     }
 
     public List<Album> findPopularAlbums() throws DAOException {
-        List<Album> albums = new ArrayList<>();
-        Statement stmt = null;
-        try {
-            stmt = connection.createStatement();
-            ResultSet resultSet = stmt.executeQuery(SQL_SELECT_POPULAR);
-            parseResultSet(resultSet, albums);
-        } catch (SQLException e) {
-            throw new DAOException(e);
-        } finally {
-            this.close(stmt);
-        }
-        return albums;
+        return findResultSet(SQL_SELECT_POPULAR);
     }
 }

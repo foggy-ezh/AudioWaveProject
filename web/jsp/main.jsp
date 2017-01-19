@@ -22,11 +22,13 @@
         <!-- Start WOWSlider.com BODY section --> <!-- add to the <body> of your page -->
         <div id="wowslider-container0">
             <div class="ws_images"><ul>
-                <li><a href="https://www.youtube.com/" target="_blank"><img src="../media/images/zz_cover.png" alt="zz cover" title="zz cover" id="wows0_0"/></a></li>
+            <c:forEach var="albums" items="${albums}" begin="0" end="3" varStatus="loop">
+                <li><a href="#"><img src="${albums.coverURI}" alt="${albums.albumName}" title="${albums.albumName}" id="wows0_${loop.current}"/></a></li>
+<%--                <li><a href="https://www.youtube.com/"><img src="../media/images/zz_cover.png" alt="zz cover" title="zz cover" id="wows0_0"/></a></li>
                 <li><img src="../media/images/cover.jpg" alt="Cover" title="Cover" id="wows0_1"/></li>
                 <li><a href="http://wowslider.com/vi"><img src="../media/images/cover_0.jpg" alt="image slider jquery" title="cover_0" id="wows0_2"/></a></li>
-                <li><img src="../media/images/folder.jpg" alt="Folder" title="Folder" id="wows0_3"/></li>
-            </ul></div>
+                <li><img src="../media/images/folder.jpg" alt="Folder" title="Folder" id="wows0_3"/></li>--%>
+            </c:forEach></ul></div>
             <div class="ws_bullets"><div>
                 <a href="#" title="zz cover"><span>1</span></a>
                 <a href="#" title="Cover"><span>2</span></a>

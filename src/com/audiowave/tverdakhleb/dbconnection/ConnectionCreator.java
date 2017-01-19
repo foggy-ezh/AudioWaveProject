@@ -14,6 +14,8 @@ import java.util.ResourceBundle;
 
 public class ConnectionCreator {
     private static final Logger LOG = LogManager.getLogger();
+    private static boolean registered;
+
     private Properties properties = new Properties();
     private String dbUrl;
 
@@ -36,6 +38,7 @@ public class ConnectionCreator {
     public Connection getConnection(){
         Connection connection = null;
         try {
+            registerDriver();
             connection = DriverManager.getConnection(dbUrl, properties);
         } catch (SQLException e) {
             LOG.log(Level.FATAL, e);
@@ -43,6 +46,11 @@ public class ConnectionCreator {
         }
         return connection;
     }
-
+    private void registerDriver() throws SQLException {
+        if (!registered) {
+            DriverManager.registerDriver(new com.mysql.jdbc.Driver());
+            registered = true;
+        }
+    }
 }
 

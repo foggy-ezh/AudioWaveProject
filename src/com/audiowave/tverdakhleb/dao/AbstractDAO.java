@@ -7,6 +7,7 @@ import com.audiowave.tverdakhleb.exception.DAOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class AbstractDAO <T extends Entity> {
@@ -32,5 +33,19 @@ public abstract class AbstractDAO <T extends Entity> {
         } catch (SQLException e) {
             throw new DAOException(e);
         }
+    }
+    public List<T> findResultSet(String sql) throws DAOException {
+        List<T> list = new ArrayList<>();
+        Statement stmt = null;
+        try {
+            stmt = connection.createStatement();
+            ResultSet resultSet = stmt.executeQuery(sql);
+            parseResultSet(resultSet, list);
+        } catch (SQLException e) {
+            throw new DAOException(e);
+        } finally {
+            this.close(stmt);
+        }
+        return list;
     }
 }

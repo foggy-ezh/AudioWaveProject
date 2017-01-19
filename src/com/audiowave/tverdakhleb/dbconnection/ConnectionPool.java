@@ -9,35 +9,51 @@ import java.sql.SQLException;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class ConnectionPool {
     private static final Logger LOG = LogManager.getLogger();
     private static final Lock LOCK = new ReentrantLock();
-    private static final int INITIAL_COUNT = 20;
+    private static final int DEFAULT_COUNT = 20;
 
     private static ConnectionPool instance;
+    private static AtomicInteger connectionsCount = new AtomicInteger();
     private static AtomicBoolean instanceCreated = new AtomicBoolean(false);
 
     private BlockingQueue<ProxyConnection> connections;
 
-    private ConnectionPool(){
-        connections = new ArrayBlockingQueue<>(INITIAL_COUNT);
-        for (int i = 0; i < INITIAL_COUNT; i++) {
-            ConnectionCreator connectionCreator = new ConnectionCreator();
-            ProxyConnection proxyConnection = new ProxyConnection(connectionCreator.getConnection());
+    private ConnectionPool(int count){
+        connectionsCount.getAndSet( count > 0 ? count : DEFAULT_COUNT);
+        connections = new ArrayBlockingQueue<>(connectionsCount.get());
+        for (int i = 0; i < connectionsCount.get(); i++) {
+            ProxyConnection proxyConnection = new ProxyConnection(new ConnectionCreator().getConnection());
             connections.offer(proxyConnection);
         }
     }
-
 
     public static ConnectionPool getInstance(){
         if (!instanceCreated.get()) {
             try {
                 LOCK.lock();
                 if (instance == null) {
-                    instance = new ConnectionPool();
+                    instance = getInstance(DEFAULT_COUNT);
+                    instanceCreated.getAndSet(true);
+                }
+            } finally {
+                LOCK.unlock();
+            }
+        }
+        return instance;
+    }
+
+    public static ConnectionPool getInstance(int count){
+        if (!instanceCreated.get()) {
+            try {
+                LOCK.lock();
+                if (instance == null) {
+                    instance = new ConnectionPool(count);
                     instanceCreated.getAndSet(true);
                 }
             } finally {
@@ -66,7 +82,7 @@ public class ConnectionPool {
 
     public void closeConnections() {
         try {
-            for (int i = 0; i < INITIAL_COUNT; i++) {
+            for (int i = 0; i < connectionsCount.get(); i++) {
                 connections.take().close();
             }
         } catch (SQLException | InterruptedException e) {
