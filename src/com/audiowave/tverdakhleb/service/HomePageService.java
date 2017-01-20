@@ -9,7 +9,6 @@ import com.audiowave.tverdakhleb.entity.Album;
 import com.audiowave.tverdakhleb.entity.Audiotrack;
 import com.audiowave.tverdakhleb.entity.Singer;
 import com.audiowave.tverdakhleb.exception.DAOException;
-import com.audiowave.tverdakhleb.exception.DBConnectionException;
 import com.audiowave.tverdakhleb.exception.ServiceException;
 
 import java.util.ArrayList;
@@ -27,10 +26,10 @@ public class HomePageService extends AbstractService {
             SingerDAO singerDAO = new SingerDAO(connection);
             for(Album album : list){
                 Singer singer = singerDAO.findSingerByAlbumId(album.getId());
-                album.setSingerID(singer.getId());
+                album.setSingerId(singer.getId());
                 album.setSingerName(singer.getName());
             }
-        } catch (DBConnectionException | DAOException e) {
+        } catch ( DAOException e) {
             throw new ServiceException(e);
         }finally {
             restorePoolConnection(pool, connection);
@@ -49,13 +48,13 @@ public class HomePageService extends AbstractService {
             AlbumDAO albumDAO = new AlbumDAO(connection);
             SingerDAO singerDAO = new SingerDAO(connection);
             for(Audiotrack audio : list){
-                Album album = albumDAO.findAlbumById(audio.getAlbumID());
+                Album album = albumDAO.findAlbumById(audio.getAlbumId());
                 audio.setAlbumCoverURI(album.getCoverURI());
                 Singer singer = singerDAO.findSingerByAudiotrackId(audio.getId());
-                audio.setSingerID(singer.getId());
+                audio.setSingerId(singer.getId());
                 audio.setSingerName(singer.getName());
             }
-        } catch (DBConnectionException | DAOException e) {
+        } catch ( DAOException e) {
             throw new ServiceException(e);
         }finally {
             restorePoolConnection(pool, connection);

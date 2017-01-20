@@ -55,7 +55,7 @@ public class SingerDAO extends AbstractDAO<Singer> {
     }
 
     @Override
-    public void parseResultSet(ResultSet resultSet, List<Singer> list) throws DAOException {
+    void parseResultSet(ResultSet resultSet, List<Singer> list) throws DAOException {
         if (resultSet != null){
             try {
                 while (resultSet.next()) {

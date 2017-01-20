@@ -22,9 +22,9 @@ public abstract class AbstractDAO <T extends Entity> {
     public abstract boolean remove(T entity) throws DAOException;
     public abstract boolean create(T entity) throws DAOException;
     public abstract T update(T entity) throws DAOException;
-    public abstract void parseResultSet(ResultSet resultSet, List<T> list) throws DAOException;
+    abstract void parseResultSet(ResultSet resultSet, List<T> list) throws DAOException;
 
-    protected List<T> findEntityById(String sql, long id) throws DAOException{
+    List<T> findEntityById(String sql, long id) throws DAOException{
         List<T> list = new ArrayList<>();
         T entity = null;
         PreparedStatement stmt = null;
@@ -41,7 +41,7 @@ public abstract class AbstractDAO <T extends Entity> {
         return list;
     }
 
-    protected void close(Statement statement) throws DAOException {
+     private void close(Statement statement) throws DAOException {
         try {
             if (statement != null) {
                 statement.close();
@@ -50,7 +50,8 @@ public abstract class AbstractDAO <T extends Entity> {
             throw new DAOException(e);
         }
     }
-    protected List<T> findResultSet(String sql) throws DAOException {
+
+    List<T> findResultSet(String sql) throws DAOException {
         List<T> list = new ArrayList<>();
         Statement stmt = null;
         try {

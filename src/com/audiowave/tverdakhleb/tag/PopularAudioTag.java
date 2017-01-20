@@ -1,23 +1,19 @@
 package com.audiowave.tverdakhleb.tag;
 
 import com.audiowave.tverdakhleb.entity.Audiotrack;
-import org.apache.logging.log4j.Level;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
+import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.TagSupport;
 import java.io.IOException;
 import java.util.List;
 
 public class PopularAudioTag extends TagSupport {
-    private static final Logger LOG = LogManager.getLogger();
     private List<Audiotrack> list;
 
     public void setList(List<Audiotrack> list) {
         this.list = list;
     }
 
-    public int doStartTag() {
+    public int doStartTag() throws JspException {
         if (list != null && !list.isEmpty()) {
             for (Audiotrack audio : list) {
                 try {
@@ -38,7 +34,7 @@ public class PopularAudioTag extends TagSupport {
                                     "\t\t\t\t</div>\n" +
                                     "\t\t\t</div>");
                 } catch (IOException e) {
-                    LOG.log(Level.ERROR, e);
+                    throw new JspException(e);
                 }
             }
         }

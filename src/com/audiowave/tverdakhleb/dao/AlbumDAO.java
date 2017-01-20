@@ -24,7 +24,7 @@ public class AlbumDAO extends AbstractDAO<Album> {
             " inner join( select album_id from audio_track as audio1 " +
             "inner join (select audio_track_id from (select count(user_id) as count, audio_track_id from user_has_audio_track " +
             "group by audio_track_id order by count desc ) as audio2) as audio3 on audio1.audio_track_id = audio3.audio_track_id" +
-            " group by audio1.album_id) as album2 on album1.album_id = album2.album_id where album1.album_blocked != 1 LIMIT 4;\n";
+            " group by audio1.album_id) as album2 on album1.album_id = album2.album_id where album1.album_blocked != 1 LIMIT 4;";
 
     public AlbumDAO(ProxyConnection connection) {
         super(connection);
@@ -52,7 +52,7 @@ public class AlbumDAO extends AbstractDAO<Album> {
     }
 
     @Override
-    public void parseResultSet(ResultSet resultSet, List<Album> list) throws DAOException {
+    void parseResultSet(ResultSet resultSet, List<Album> list) throws DAOException {
         if (resultSet != null){
             try {
                 while (resultSet.next()) {

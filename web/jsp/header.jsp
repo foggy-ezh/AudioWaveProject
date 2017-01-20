@@ -16,9 +16,9 @@
     <meta charset="UTF-8">
     <link rel="stylesheet" href="../css/vendor/bootstrap.min.css">
     <link rel="stylesheet" href="../css/style.css">
-    <link rel="stylesheet" type="text/css" href="../css/slider.style.css" />
-    <link rel="stylesheet" type="text/css" href="../css/audio.css" />
-    <link rel="stylesheet" type="text/css" href="../css/hottest.css" />
+    <link rel="stylesheet" type="text/css" href="../css/slider.style.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/audio.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/hottest.css"/>
     <title>AudioWave</title>
 </head>
 
@@ -50,46 +50,57 @@
                     <div class="form-group">
                         <input type="text" placeholder="<fmt:message key="header.search"/>" class="form-control">
                     </div>
-                    <button type="submit" class="btn btn-default search"><img src="../media/images/search.png" width="19" height="19" /></button>
+                    <button type="submit" class="btn btn-default search"><img src="../media/images/search.png"
+                                                                              width="19" height="19"/></button>
                 </form>
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a href="#myModal" data-toggle="modal"><fmt:message key="header.auth"/></a></li>
-                    <!-- 					<li class="dropdown">
-                                            <a data-toggle="dropdown" class="dropdown-toggle" href="#");">
-                                                Вы вошли как 12345678912345678912
-                                                <b class="caret"></b>
-                                            </a>
-                                            <ul role="menu" class="dropdown-menu">
-                                                <li><a href="#">Моя аудиотека</a></li>
-                                                <li><a href="#">Настройки</a></li>
-                                                <li class="divider"></li>
-                                                <li><a href="#">Выход</a></li>
-                                            </ul>
-                                        </li> -->
+                    <c:choose>
+                        <c:when test="${sessionScope.get('role')== 'guest'}">
+                            <li><a href="#myModal" data-toggle="modal"><fmt:message key="header.auth"/></a></li>
+                        </c:when>
+                        <c:otherwise>
+                            <li class="dropdown">
+                                <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                                    Вы вошли как 12345678912345678912
+                                    <b class="caret"></b>
+                                </a>
+                                <ul role="menu" class="dropdown-menu">
+                                    <li><a href="#">Моя аудиотека</a></li>
+                                    <li><a href="#">Настройки</a></li>
+                                    <li class="divider"></li>
+                                    <li><a href="#">Выход</a></li>
+                                </ul>
+                            </li>
+                        </c:otherwise>
+                    </c:choose>
                 </ul>
             </div>
         </nav>
         <!-- Modal -->
-        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+             aria-hidden="true">
             <div class="modal-dialog modal-sm">
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                        <h4 class="modal-title" id="myModalLabel">Авторизация</h4>
+                        <h4 class="modal-title" id="myModalLabel"><fmt:message key="header.auth"/></h4>
                         <p>Введите данные для входа</p>
                     </div>
                     <div class="modal-body">
-                        <form name = "signin" method="post" action="AudioWave">
+                        <form name="signin" method="post" action="AudioWave">
                             <span>Логин</span><br>
-                            <input type="text" name="login" required title="Используйте от 5 символов = 'a-zA-Z_0-9'" pattern="[\w]{5,}"> <span class="err" id="err-login"></span><br>
+                            <input type="text" name="login" required title="Используйте от 5 символов = 'a-zA-Z_0-9'"
+                                   pattern="[\w]{5,}"> <span class="err" id="err-login"></span><br>
                             <p></p>
                             <span>Пароль</span><br>
-                            <input type="password" name="pwd1" required title="Используйте от 6 символов""> <span class="err" id="err-pwd1"></span><br>
-                            <br/><button type="submit" class="btn">Войти</button>
+                            <input type="password" name="pwd1" required title="Используйте от 6 символов"> <span
+                                class="err" id="err-pwd1"></span><br>
+                            <br/>
+                            <button type="submit" class="btn">Войти</button>
                             <input type="hidden" name="command" value="signin"/>
                         </form>
                         <p></p>
-                        <p> Нет аккаунта?  <a href="#myModall" data-toggle="modal">Зарегистрироваться</a></p>
+                        <p> Нет аккаунта? <a href="#myModall" data-toggle="modal">Зарегистрироваться</a></p>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Закрыть</button>
@@ -97,7 +108,8 @@
                 </div>
             </div>
         </div>
-        <div class="modal fade" id="myModall" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal fade" id="myModall" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+             aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -114,7 +126,6 @@
                 </div>
             </div>
         </div>
-
 
 </body>
 </html>

@@ -1,34 +1,34 @@
-/*
 package com.audiowave.tverdakhleb.filter;
+
+import com.audiowave.tverdakhleb.entity.RoleType;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
-import javax.servlet.annotation.WebInitParam;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 @WebFilter(
-        urlPatterns = {"/AudioWave"},
-        initParams = {@WebInitParam(name="command", value="changeLanguage")}
+        urlPatterns = {"/*"}
 
 )
 
-public class EnLanguageFilter implements Filter {
-    String command;
+public class RoleFilter implements Filter {
+    private static final String ROLE = "role";
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
-        command = filterConfig.getInitParameter("command");
     }
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         if (servletRequest instanceof HttpServletRequest) {
-            String url = ((HttpServletRequest)servletRequest).getRequestURL().toString();
-            String queryString = ((HttpServletRequest)servletRequest).getQueryString();
-            System.out.println(url + "?" + queryString );
+            HttpSession session = ((HttpServletRequest)servletRequest).getSession(false);
+            if (session == null){
+                session = ((HttpServletRequest)servletRequest).getSession();
+                session.setAttribute(ROLE, RoleType.GUEST.getRole());
+            }
         }
         filterChain.doFilter(servletRequest,servletResponse);
-        if(servletRequest.getParameter("en") != null);
     }
 
     @Override
@@ -36,4 +36,3 @@ public class EnLanguageFilter implements Filter {
 
     }
 }
-*/

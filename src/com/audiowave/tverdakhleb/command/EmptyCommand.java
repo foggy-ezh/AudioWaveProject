@@ -12,8 +12,9 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
 public class EmptyCommand implements ICommandAction {
-    private static final Logger LOG = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger();
 
+    public static final String ROLE = "role";
     private static final String PATH_PAGE_MAIN = "path.page.main";
     @Override
     public String execute(HttpServletRequest request) throws IOException, ServletException {
@@ -22,7 +23,7 @@ public class EmptyCommand implements ICommandAction {
             request.setAttribute("albums", service.getPopularAlbum());
             request.setAttribute("audiotracks", service.getPopularAudiotrack());
         } catch (ServiceException e) {
-            LOG.log(Level.ERROR,e);
+            LOGGER.log(Level.ERROR,e);
         }
         ConfigurationManager config = new ConfigurationManager();
         return config.getProperty(PATH_PAGE_MAIN);

@@ -25,7 +25,7 @@ public enum CommandType {
     }
 
     static public ICommandAction getLastCommand(HttpServletRequest request){
-        String action = request.getParameter(LAST_COMMAND);
+        String action = String.valueOf(request.getSession().getAttribute(LAST_COMMAND));
         return defineCommand(action);
     }
 

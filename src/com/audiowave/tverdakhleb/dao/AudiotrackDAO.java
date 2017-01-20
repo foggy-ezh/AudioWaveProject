@@ -16,26 +16,24 @@ public class AudiotrackDAO extends AbstractDAO<Audiotrack> {
     private static final String COLUMN_BLOCKED = "audio_track_blocked";
     private static final String COLUMN_ALBUM_ID = "album_id";
 
-    private static final String SQL_SELECT_POPULAR = "SELECT *\n" +
-            "        FROM\n" +
-            "            audio_track AS audio1\n" +
-            "        INNER JOIN\n" +
-            "            (\n" +
-            "                SELECT\n" +
-            "                    audio_track_id\n" +
-            "                FROM\n" +
-            "                    (\n" +
-            "                        SELECT\n" +
-            "                            COUNT(user_id) AS COUNT,\n" +
-            "                            audio_track_id\n" +
-            "                        FROM\n" +
-            "                            user_has_audio_track\n" +
-            "                        GROUP BY\n" +
-            "                            audio_track_id\n" +
-            "                        ORDER BY\n" +
-            "                            COUNT DESC ) AS audio2) AS audio3\n" +
-            "        ON\n" +
-            "            audio1.audio_track_id = audio3.audio_track_id\n" +
+    private static final String SQL_SELECT_POPULAR = "SELECT *" +
+            "        FROM" +
+            "            audio_track AS audio1" +
+            "        INNER JOIN" +
+            "            ( SELECT" +
+            "                    audio_track_id" +
+            "                FROM" +
+            "                    ( SELECT" +
+            "                            COUNT(user_id) AS COUNT," +
+            "                            audio_track_id" +
+            "                        FROM" +
+            "                            user_has_audio_track" +
+            "                        GROUP BY" +
+            "                            audio_track_id" +
+            "                        ORDER BY" +
+            "                            COUNT DESC ) AS audio2) AS audio3" +
+            "        ON" +
+            "            audio1.audio_track_id = audio3.audio_track_id" +
 //            "            WHERE audio1.audio_track_blocked = 0"+
             "            LIMIT 9;";
 
@@ -65,7 +63,7 @@ public class AudiotrackDAO extends AbstractDAO<Audiotrack> {
     }
 
     @Override
-    public void parseResultSet(ResultSet resultSet, List<Audiotrack> list) throws DAOException {
+     void parseResultSet(ResultSet resultSet, List<Audiotrack> list) throws DAOException {
         if (resultSet != null){
             try {
                 while (resultSet.next()) {

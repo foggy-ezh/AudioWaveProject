@@ -1,6 +1,5 @@
 package com.audiowave.tverdakhleb.dbconnection;
 
-import com.audiowave.tverdakhleb.exception.DBConnectionException;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -13,8 +12,7 @@ import java.util.Properties;
 import java.util.ResourceBundle;
 
 public class ConnectionCreator {
-    private static final Logger LOG = LogManager.getLogger();
-    private static boolean registered;
+    private static final Logger LOGGER = LogManager.getLogger();
 
     private Properties properties = new Properties();
     private String dbUrl;
@@ -30,7 +28,7 @@ public class ConnectionCreator {
             properties.put("useUnicode", bundle.getString("db.useUnicode"));
             properties.put("useSSL", bundle.getString("db.useSSL"));
         } catch (MissingResourceException e) {
-            LOG.log(Level.FATAL, e);
+            LOGGER.log(Level.FATAL, e);
             throw new RuntimeException();
         }
     }
@@ -38,19 +36,12 @@ public class ConnectionCreator {
     public Connection getConnection(){
         Connection connection = null;
         try {
-            registerDriver();
             connection = DriverManager.getConnection(dbUrl, properties);
         } catch (SQLException e) {
-            LOG.log(Level.FATAL, e);
-            throw new RuntimeException();
+            LOGGER.log(Level.FATAL, e);
+            throw new RuntimeException(e);
         }
         return connection;
-    }
-    private void registerDriver() throws SQLException {
-        if (!registered) {
-            DriverManager.registerDriver(new com.mysql.jdbc.Driver());
-            registered = true;
-        }
     }
 }
 

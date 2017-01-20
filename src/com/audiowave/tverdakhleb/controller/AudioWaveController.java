@@ -3,6 +3,9 @@ package com.audiowave.tverdakhleb.controller;
 import com.audiowave.tverdakhleb.command.CommandType;
 import com.audiowave.tverdakhleb.command.ICommandAction;
 import com.audiowave.tverdakhleb.dbconnection.ConnectionPool;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -11,15 +14,24 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 
 
 @WebServlet("/AudioWave")
 public class AudioWaveController extends HttpServlet {
+    private static final Logger LOGGER = LogManager.getLogger();
     private static final int CONNECTIONS_COUNT = 20;
 
     @Override
     public void init() throws ServletException {
         super.init();
+        try {
+            DriverManager.registerDriver(new com.mysql.jdbc.Driver());
+        } catch (SQLException e) {
+            LOGGER.log(Level.FATAL, e);
+            throw new RuntimeException(e);
+        }
         ConnectionPool.getInstance(CONNECTIONS_COUNT);
     }
 

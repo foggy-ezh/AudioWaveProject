@@ -7,7 +7,6 @@ import com.audiowave.tverdakhleb.dbconnection.ProxyConnection;
 import com.audiowave.tverdakhleb.entity.Album;
 import com.audiowave.tverdakhleb.entity.Audiotrack;
 import com.audiowave.tverdakhleb.exception.DAOException;
-import com.audiowave.tverdakhleb.exception.DBConnectionException;
 import org.testng.annotations.Test;
 
 import java.util.List;
@@ -16,7 +15,7 @@ import java.util.List;
 public class TestAlbumDAO {
 
     @Test
-    public void testing() throws DBConnectionException {
+    public void testing() {
         ConnectionPool pool = ConnectionPool.getInstance();
         ProxyConnection connection = null;
         try {
@@ -30,9 +29,8 @@ public class TestAlbumDAO {
             List<Audiotrack> popular1 = audiotrackDAO.findPopularAudiotrack();
             for ( Audiotrack audiotrack: popular1) {
                 System.out.println(audiotrack.getName());
-                System.out.println(audiotrack.hashCode());
             }
-        } catch (DBConnectionException | DAOException e) {
+        } catch ( DAOException e) {
             e.printStackTrace();
         } finally {
             pool.restoreConnection(connection);

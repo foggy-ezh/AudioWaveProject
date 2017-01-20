@@ -1,6 +1,5 @@
 package com.audiowave.tverdakhleb.dbconnection;
 
-import com.audiowave.tverdakhleb.exception.DBConnectionException;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -14,7 +13,7 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class ConnectionPool {
-    private static final Logger LOG = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger();
     private static final Lock LOCK = new ReentrantLock();
     private static final int DEFAULT_COUNT = 20;
 
@@ -63,30 +62,32 @@ public class ConnectionPool {
         return instance;
     }
 
-    public ProxyConnection getConnection() throws DBConnectionException {
+    public ProxyConnection getConnection() {
+        ProxyConnection connection = null;
         try {
-            return connections.take();
+            connection = connections.take();
         } catch (InterruptedException e) {
-            throw new DBConnectionException(e);
+            LOGGER.log(Level.ERROR, e);
         }
+        return connection;
     }
 
 
-    public void restoreConnection(ProxyConnection connection) throws DBConnectionException {
+    public void restoreConnection(ProxyConnection connection) {
         try {
             connections.put(connection);
         } catch (InterruptedException e) {
-            throw new DBConnectionException(e);
-        }
+            LOGGER.log(Level.ERROR, e);
+    }
     }
 
     public void closeConnections() {
-        try {
-            for (int i = 0; i < connectionsCount.get(); i++) {
+        for (int i = 0; i < connectionsCount.get(); i++) {
+            try {
                 connections.take().close();
+            } catch (SQLException | InterruptedException e) {
+                LOGGER.log(Level.ERROR, e);
             }
-        } catch (SQLException | InterruptedException e) {
-            LOG.log(Level.ERROR, e);
         }
     }
 }
