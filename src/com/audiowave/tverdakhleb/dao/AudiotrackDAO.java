@@ -16,26 +16,10 @@ public class AudiotrackDAO extends AbstractDAO<Audiotrack> {
     private static final String COLUMN_BLOCKED = "audio_track_blocked";
     private static final String COLUMN_ALBUM_ID = "album_id";
 
-    private static final String SQL_SELECT_POPULAR = "SELECT *" +
-            "        FROM" +
-            "            audio_track AS audio1" +
-            "        INNER JOIN" +
-            "            ( SELECT" +
-            "                    audio_track_id" +
-            "                FROM" +
-            "                    ( SELECT" +
-            "                            COUNT(user_id) AS COUNT," +
-            "                            audio_track_id" +
-            "                        FROM" +
-            "                            user_has_audio_track" +
-            "                        GROUP BY" +
-            "                            audio_track_id" +
-            "                        ORDER BY" +
-            "                            COUNT DESC ) AS audio2) AS audio3" +
-            "        ON" +
-            "            audio1.audio_track_id = audio3.audio_track_id" +
-//            "            WHERE audio1.audio_track_blocked = 0"+
-            "            LIMIT 9;";
+    private static final String SQL_SELECT_POPULAR = "SELECT * FROM (SELECT audio1.audio_track_id, audio1.audio_track_name," +
+            " audio1.audio_track_location, audio1.audio_track_blocked, audio1.album_id, audio1.audio_track_cost, audio3.COUNT FROM audio_track AS audio1" +
+            " INNER JOIN ( SELECT COUNT(user_id) AS COUNT,audio_track_id FROM user_has_audio_track GROUP BY audio_track_id ) AS audio3" +
+            " ON audio1.audio_track_id = audio3.audio_track_id WHERE audio1.audio_track_blocked = 0) as t1 ORDER BY COUNT DESC limit 9;";
 
     public AudiotrackDAO(ProxyConnection connection) {
         super(connection);
@@ -63,6 +47,11 @@ public class AudiotrackDAO extends AbstractDAO<Audiotrack> {
     }
 
     @Override
+    void parseFullResultSet(ResultSet resultSet, List<Audiotrack> list) throws DAOException {
+
+    }
+
+    @Override
      void parseResultSet(ResultSet resultSet, List<Audiotrack> list) throws DAOException {
         if (resultSet != null){
             try {
@@ -82,6 +71,6 @@ public class AudiotrackDAO extends AbstractDAO<Audiotrack> {
     }
 
     public List<Audiotrack> findPopularAudiotrack() throws DAOException {
-        return findResultSet(SQL_SELECT_POPULAR);
+        return findResultSet(SQL_SELECT_POPULAR, false);
     }
 }

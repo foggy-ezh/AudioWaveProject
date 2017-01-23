@@ -9,7 +9,8 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 @WebFilter(
-        urlPatterns = {"/*"}
+        urlPatterns = {"/*"},
+        dispatcherTypes = {DispatcherType.REQUEST}
 
 )
 

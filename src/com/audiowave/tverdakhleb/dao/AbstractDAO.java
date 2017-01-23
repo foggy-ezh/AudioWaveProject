@@ -23,15 +23,18 @@ public abstract class AbstractDAO <T extends Entity> {
     public abstract boolean create(T entity) throws DAOException;
     public abstract T update(T entity) throws DAOException;
     abstract void parseResultSet(ResultSet resultSet, List<T> list) throws DAOException;
+    abstract void parseFullResultSet(ResultSet resultSet, List<T> list) throws DAOException;
 
-    List<T> findEntityById(String sql, long id) throws DAOException{
+    List<T> findEntityByParameter(String sql, String param, boolean fullParse) throws DAOException{
         List<T> list = new ArrayList<>();
         T entity = null;
         PreparedStatement stmt = null;
         try {
             stmt = connection.prepareStatement(sql);
-            stmt.setLong(1, id);
-            parseResultSet(stmt.executeQuery(), list);
+            stmt.setString(1, param);
+            if (fullParse){parseFullResultSet(stmt.executeQuery(),list);}
+            else {
+                parseResultSet(stmt.executeQuery(), list);}
         }
         catch (SQLException e) {
             throw new DAOException(e);
@@ -51,13 +54,15 @@ public abstract class AbstractDAO <T extends Entity> {
         }
     }
 
-    List<T> findResultSet(String sql) throws DAOException {
+    List<T> findResultSet(String sql, boolean fullParse) throws DAOException {
         List<T> list = new ArrayList<>();
         Statement stmt = null;
         try {
             stmt = connection.createStatement();
             ResultSet resultSet = stmt.executeQuery(sql);
-            parseResultSet(resultSet, list);
+            if (fullParse){parseFullResultSet(resultSet,list);}
+            else {
+            parseResultSet(resultSet, list);}
         } catch (SQLException e) {
             throw new DAOException(e);
         } finally {

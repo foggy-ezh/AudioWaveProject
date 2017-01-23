@@ -29,7 +29,7 @@ public class ConnectionCreator {
             properties.put("useSSL", bundle.getString("db.useSSL"));
         } catch (MissingResourceException e) {
             LOGGER.log(Level.FATAL, e);
-            throw new RuntimeException();
+            throw new RuntimeException(e);
         }
     }
 

@@ -11,6 +11,10 @@ public enum CommandType {
     CHANGE_LANGUAGE {
         @Override
         public ICommandAction getCommand() {return new CommandChangeLanguage();}
+    },
+    LOG_IN {
+        @Override
+        public ICommandAction getCommand() {return new CommandLogIn();}
     };
 
     private static final Logger LOGGER = LogManager.getLogger();
@@ -31,7 +35,7 @@ public enum CommandType {
 
     static private ICommandAction defineCommand(String action){
         ICommandAction command = new EmptyCommand();
-        if(action == null || action.isEmpty()){
+        if(action == null || action.isEmpty() || action.equals("null")){
             return command;
         }
         try {

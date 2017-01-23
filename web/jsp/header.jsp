@@ -23,8 +23,6 @@
 </head>
 
 <body>
-<div class="container application">
-    <div class="content">
         <nav role="navigation" class="navbar navbar-default .navbar-fixed-top">
             <!-- Логотип и мобильное меню -->
             <div class="navbar-header">
@@ -61,7 +59,7 @@
                         <c:otherwise>
                             <li class="dropdown">
                                 <a data-toggle="dropdown" class="dropdown-toggle" href="#">
-                                    Вы вошли как 12345678912345678912
+                                    Вы вошли как ${sessionScope.get('currentUser').login}
                                     <b class="caret"></b>
                                 </a>
                                 <ul role="menu" class="dropdown-menu">
@@ -84,26 +82,23 @@
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                         <h4 class="modal-title" id="myModalLabel"><fmt:message key="header.auth"/></h4>
-                        <p>Введите данные для входа</p>
+                        <p><fmt:message key="header.login.input"/></p>
                     </div>
                     <div class="modal-body">
-                        <form name="signin" method="post" action="AudioWave">
-                            <span>Логин</span><br>
-                            <input type="text" name="login" required title="Используйте от 5 символов = 'a-zA-Z_0-9'"
-                                   pattern="[\w]{5,}"> <span class="err" id="err-login"></span><br>
+                        <form name="log_in" method="post" action="AudioWave">
+                            <span><fmt:message key="header.login.login"/></span><br>
+                            <input type="text" name="login"><br>
                             <p></p>
-                            <span>Пароль</span><br>
-                            <input type="password" name="pwd1" required title="Используйте от 6 символов"> <span
-                                class="err" id="err-pwd1"></span><br>
-                            <br/>
-                            <button type="submit" class="btn">Войти</button>
-                            <input type="hidden" name="command" value="signin"/>
+                            <span><fmt:message key="header.login.password"/></span><br>
+                            <input type="password" name="password"><br>
+                            <button type="submit" class="btn" id="login-btn"><fmt:message key="header.login"/></button>
+                            <input type="hidden" name="command" value="log_in"/>
                         </form>
-                        <p></p>
-                        <p> Нет аккаунта? <a href="#myModall" data-toggle="modal">Зарегистрироваться</a></p>
+                        <p id="login-err"></p>
+                        <p><fmt:message key="header.login.not.reg"/>  <a href="#myModall" data-toggle="modal"><fmt:message key="header.login.register"/></a></p>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Закрыть</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal"><fmt:message key="header.login.close"/></button>
                     </div>
                 </div>
             </div>

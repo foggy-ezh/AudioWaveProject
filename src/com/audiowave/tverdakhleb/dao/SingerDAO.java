@@ -55,6 +55,10 @@ public class SingerDAO extends AbstractDAO<Singer> {
     }
 
     @Override
+    void parseFullResultSet(ResultSet resultSet, List<Singer> list) throws DAOException {
+    }
+
+    @Override
     void parseResultSet(ResultSet resultSet, List<Singer> list) throws DAOException {
         if (resultSet != null){
             try {
@@ -70,14 +74,26 @@ public class SingerDAO extends AbstractDAO<Singer> {
     }
 
     public Singer findSingerById(long id) throws DAOException {
-        return findEntityById(SQL_SELECT_BY_ID, id).get(0);
+        List<Singer> list = findEntityByParameter(SQL_SELECT_BY_ID, String.valueOf(id), false);
+        if(list != null && !list.isEmpty()){
+            return list.get(0);
+        }
+        return null;
     }
 
     public Singer findSingerByAudiotrackId(long id) throws DAOException {
-        return findEntityById(SQL_SELECT_BY_AUDIOTRACK_ID, id).get(0);
+        List<Singer> list = findEntityByParameter(SQL_SELECT_BY_AUDIOTRACK_ID, String.valueOf(id), false);
+        if(list != null && !list.isEmpty()){
+            return list.get(0);
+        }
+        return null;
     }
 
     public Singer findSingerByAlbumId(long id) throws DAOException {
-        return findEntityById(SQL_SELECT_BY_ALBUM_ID, id).get(0);
+        List<Singer> list = findEntityByParameter(SQL_SELECT_BY_ALBUM_ID, String.valueOf(id), false);
+        if(list != null && !list.isEmpty()){
+            return list.get(0);
+        }
+        return null;
     }
 }
