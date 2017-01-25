@@ -20,7 +20,7 @@ public abstract class AbstractDAO <T extends Entity> {
 
     public abstract boolean remove(long id) throws DAOException;
     public abstract boolean remove(T entity) throws DAOException;
-    public abstract boolean create(T entity) throws DAOException;
+    public abstract void create(T entity) throws DAOException;
     public abstract T update(T entity) throws DAOException;
     abstract void parseResultSet(ResultSet resultSet, List<T> list) throws DAOException;
     abstract void parseFullResultSet(ResultSet resultSet, List<T> list) throws DAOException;
@@ -44,7 +44,7 @@ public abstract class AbstractDAO <T extends Entity> {
         return list;
     }
 
-     private void close(Statement statement) throws DAOException {
+    void close(Statement statement) throws DAOException {
         try {
             if (statement != null) {
                 statement.close();

@@ -6,18 +6,18 @@ import com.audiowave.tverdakhleb.dbconnection.ProxyConnection;
 import com.audiowave.tverdakhleb.entity.User;
 import com.audiowave.tverdakhleb.exception.DAOException;
 import com.audiowave.tverdakhleb.exception.ServiceException;
-import org.mindrot.jbcrypt.BCrypt;
+import com.audiowave.tverdakhleb.manager.ValidationManager;
 
-public class LogInCheckService  extends  AbstractService{
+public class RegistrationService extends AbstractService {
 
-    public boolean checkLogin(String login) throws ServiceException {
+    public boolean checkLoginExist(String login) throws ServiceException {
         ConnectionPool pool = ConnectionPool.getInstance();
         ProxyConnection connection = null;
         try {
             connection = pool.getConnection();
             UserDAO userDAO = new UserDAO(connection);
             User user = userDAO.findUserByLogin(login);
-            return user != null;
+            return user == null;
         } catch ( DAOException e) {
             throw new ServiceException(e);
         }finally {
@@ -25,14 +25,24 @@ public class LogInCheckService  extends  AbstractService{
         }
     }
 
-    public boolean checkPassword(String login, String password) throws ServiceException {
+    public boolean addUser(User user) throws ServiceException {
         ConnectionPool pool = ConnectionPool.getInstance();
         ProxyConnection connection = null;
         try {
+            ValidationManager validator = new ValidationManager();
+            if (!validator.checkLogin(user.getLogin()) || !validator.checkPassword(user.getPassword()) ||
+                    !validator.checkMail(user.getMail()) || !validator.checkName(user.getFirstName()) ||
+                    !validator.checkName(user.getLastName())){
+                return false;
+            }
             connection = pool.getConnection();
             UserDAO userDAO = new UserDAO(connection);
-            User user = userDAO.findUserByLogin(login);
-            return user != null && BCrypt.checkpw(password, user.getPassword());
+            userDAO.create(user);
+            if(user.getId()== 0){
+                return false;
+            }
+            userDAO.addInfo(user);
+            return true;
         } catch ( DAOException e) {
             throw new ServiceException(e);
         }finally {
@@ -40,17 +50,4 @@ public class LogInCheckService  extends  AbstractService{
         }
     }
 
-    public User getCurrentUser(String login) throws ServiceException {
-        ConnectionPool pool = ConnectionPool.getInstance();
-        ProxyConnection connection = null;
-        try {
-            connection = pool.getConnection();
-            UserDAO userDAO = new UserDAO(connection);
-            return userDAO.findUserByLogin(login);
-        } catch ( DAOException e) {
-            throw new ServiceException(e);
-        }finally {
-            restorePoolConnection(pool, connection);
-        }
-    }
 }

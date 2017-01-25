@@ -6,11 +6,7 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<fmt:setLocale value="${lang}"/>
-<fmt:setBundle basename="properties.languageText"/>
-<html lang="en">
+<html>
 <head>
     <link rel="shortcut icon" href="../media/images/title_logo.png">
 </head>
@@ -24,6 +20,7 @@
     <a href="../AudioWave?command=change_language&lang=ru_RU">
         <img class="imgLang rus" src="../media/images/russia.png" alt="alt">
     </a>
+</div>
 </div>
 
 <script src="../js/vendor/angular.min.js"></script>
@@ -41,11 +38,32 @@
     });
 </script>
 <script type="text/javascript">
-    <c:if test="${script == 'true'}">
+    <c:if test="${loginErr == 'true'}">
     $("#myModal").modal('show');
     document.getElementById("login-err").innerHTML = '<fmt:message key="header.login.error"/>';
+    <c:set var="loginErr" value="false" scope="session"/>
     </c:if>
-    <%--${script}--%>
+    <c:if test="${regErr == 'login'}">
+    $("#myModall").modal('show');
+    document.getElementById("reg-err").innerHTML = '<fmt:message key="header.reg.login.error"/>';
+    <c:set var="regErr" value="false" scope="session"/>
+    </c:if>
+    <c:if test="${regErr == 'true'}">
+    $("#myModall").modal('show');
+    document.getElementById("reg-err").innerHTML = '<fmt:message key="header.reg.error"/>';
+    <c:set var="regErr" value="false" scope="session"/>
+    </c:if>
+    <c:if test="${regErr == 'success'}">
+    $("#myModall").modal('show');
+    document.getElementById("reg-err").innerHTML = '<fmt:message key="header.reg.success"/>';
+    <c:set var="regErr" value="false" scope="session"/>
+    </c:if>
+    $('#myModall').on('show.bs.modal', function () {
+        $("#myModal").modal('hide');
+    });
+    $('#myModal').on('hide.bs.modal', function() {
+        document.getElementById("login-err").innerHTML='';
+    })
 </script>
 </body>
 </html>

@@ -22,6 +22,8 @@ import java.sql.SQLException;
 public class AudioWaveController extends HttpServlet {
     private static final Logger LOGGER = LogManager.getLogger();
     private static final int CONNECTIONS_COUNT = 20;
+    private static final String PROCESS = "process";
+    private static final String REDIRECT = "redirect";
 
     @Override
     public void init() throws ServletException {
@@ -38,20 +40,29 @@ public class AudioWaveController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         processRequest(req, resp);
+
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         processRequest(req, resp);
+
     }
 
     private void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        ICommandAction command = CommandType.getCurrentCommand(request);
-
-        String page = command.execute(request);
-        RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(page);
-        dispatcher.forward(request, response);
+        System.out.println(request.getRequestURI()+'?'+request.getQueryString());
+        ICommandAction command = CommandType.defineCommand(request);
+        String page =  command.execute(request);
+        System.out.println(page);
+        System.out.println(request.getSession().getAttribute(PROCESS));
+        System.out.println(REDIRECT.equals(request.getSession().getAttribute(PROCESS)));
+        if(REDIRECT.equals(request.getSession().getAttribute(PROCESS))){
+            response.sendRedirect(page);
+        } else {
+            RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(page);
+            dispatcher.forward(request, response);
+        }
     }
 
     @Override

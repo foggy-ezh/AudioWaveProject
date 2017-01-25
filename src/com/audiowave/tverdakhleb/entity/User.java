@@ -5,6 +5,9 @@ public class User extends Entity{
     private String password;
     private boolean isAdmin;
     private long discountId;
+    private String mail;
+    private String firstName;
+    private String lastName;
 
     public User(long id, String login, String password, boolean isAdmin, long discountId) {
         super(id);
@@ -12,6 +15,21 @@ public class User extends Entity{
         this.password = password;
         this.isAdmin = isAdmin;
         this.discountId = discountId;
+    }
+
+    public User(long id, String login, String password, boolean isAdmin, long discountId, String mail, String firstName, String lastName) {
+        super(id);
+        this.login = login;
+        this.password = password;
+        this.isAdmin = isAdmin;
+        this.discountId = discountId;
+        this.mail = mail;
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
+
+    public User() {
+        super(0);
     }
 
     public String getLogin() {
@@ -46,6 +64,34 @@ public class User extends Entity{
         this.discountId = discountId;
     }
 
+    public void setDiscountId(long discountId) {
+        this.discountId = discountId;
+    }
+
+    public String getMail() {
+        return mail;
+    }
+
+    public void setMail(String mail) {
+        this.mail = mail;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -57,7 +103,10 @@ public class User extends Entity{
         if (isAdmin != user.isAdmin) return false;
         if (discountId != user.discountId) return false;
         if (login != null ? !login.equals(user.login) : user.login != null) return false;
-        return password != null ? password.equals(user.password) : user.password == null;
+        if (password != null ? !password.equals(user.password) : user.password != null) return false;
+        if (mail != null ? !mail.equals(user.mail) : user.mail != null) return false;
+        if (firstName != null ? !firstName.equals(user.firstName) : user.firstName != null) return false;
+        return lastName != null ? lastName.equals(user.lastName) : user.lastName == null;
     }
 
     @Override
@@ -67,6 +116,9 @@ public class User extends Entity{
         result = 31 * result + (password != null ? password.hashCode() : 0);
         result = 31 * result + (isAdmin ? 1 : 0);
         result = 31 * result + (int) (discountId ^ (discountId >>> 32));
+        result = 31 * result + (mail != null ? mail.hashCode() : 0);
+        result = 31 * result + (firstName != null ? firstName.hashCode() : 0);
+        result = 31 * result + (lastName != null ? lastName.hashCode() : 0);
         return result;
     }
 }

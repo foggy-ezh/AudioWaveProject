@@ -4,11 +4,8 @@ import com.audiowave.tverdakhleb.dbconnection.ProxyConnection;
 import com.audiowave.tverdakhleb.entity.Album;
 import com.audiowave.tverdakhleb.exception.DAOException;
 
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
 import java.util.List;
 
 public class AlbumDAO extends AbstractDAO<Album> {
@@ -42,8 +39,7 @@ public class AlbumDAO extends AbstractDAO<Album> {
     }
 
     @Override
-    public boolean create(Album entity) throws DAOException {
-        return false;
+    public void create(Album entity) throws DAOException {
     }
 
     @Override

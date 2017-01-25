@@ -23,6 +23,8 @@
 </head>
 
 <body>
+<div class="container application">
+    <div class="content">
         <nav role="navigation" class="navbar navbar-default .navbar-fixed-top">
             <!-- Логотип и мобильное меню -->
             <div class="navbar-header">
@@ -59,14 +61,14 @@
                         <c:otherwise>
                             <li class="dropdown">
                                 <a data-toggle="dropdown" class="dropdown-toggle" href="#">
-                                    Вы вошли как ${sessionScope.get('currentUser').login}
+                                    <fmt:message key="header.enter"/> ${sessionScope.currentUser.login}
                                     <b class="caret"></b>
                                 </a>
                                 <ul role="menu" class="dropdown-menu">
                                     <li><a href="#">Моя аудиотека</a></li>
                                     <li><a href="#">Настройки</a></li>
                                     <li class="divider"></li>
-                                    <li><a href="#">Выход</a></li>
+                                    <li><a href="#"><fmt:message key="header.exit"/></a></li>
                                 </ul>
                             </li>
                         </c:otherwise>
@@ -95,10 +97,13 @@
                             <input type="hidden" name="command" value="log_in"/>
                         </form>
                         <p id="login-err"></p>
-                        <p><fmt:message key="header.login.not.reg"/>  <a href="#myModall" data-toggle="modal"><fmt:message key="header.login.register"/></a></p>
+                        <p><fmt:message key="header.login.not.reg"/> <a href="#myModall"
+                                                                        data-toggle="modal"><fmt:message
+                                key="header.login.register"/></a></p>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal"><fmt:message key="header.login.close"/></button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal"><fmt:message
+                                key="header.login.close"/></button>
                     </div>
                 </div>
             </div>
@@ -109,18 +114,42 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                        <h4 class="modal-title" id="myModalLabell">Название модали111</h4>
+                        <h4 class="modal-title" id="myModalLabel1"><fmt:message key="header.reg"/></h4>
+                        <p><fmt:message key="header.reg.data"/></p>
                     </div>
-                    <div class="modal-body">
-                        <a href="#myModal" data-toggle="modal">Авторизация</a>
+                    <div class="modal-body modal-body-reg">
+                        <form name="reg" onsubmit='return regValidate()' method="post" action="AudioWave">
+                            <div class="inline-block">
+                                <span><fmt:message key="header.login.login"/></span><br>
+                                <input type="text" name="login" required title="Use 'a-zA-Z_0-9'" pattern="[\w]*"><br>
+                                <span><fmt:message key="header.login.password"/></span><br>
+                                <input type="password" name="pwd1" required title="Use at least 6 symbols"><br>
+                                <span><fmt:message key="header.reg.password"/></span><br>
+                                <input type="password" name="pwd2" required><br>
+                            </div>
+                            <div class="inline-block">
+                                <span><fmt:message key="header.mail"/></span><br>
+                                <input type="text" name="mail" required><br>
+                                <span><fmt:message key="header.name"/></span><br>
+                                <input type="text" name="firstName" required title="Use 'a-zA-Z'"
+                                       pattern="[a-zA-Z]*"><br>
+                                <span><fmt:message key="header.last.name"/></span><br>
+                                <input type="text" name="lastName" required title="Use 'a-zA-Z'"
+                                       pattern="[a-zA-Z]*"><br>
+                            </div>
+                            <br/>
+                            <button type="submit" class="btn btn-primary" id="reg-btn"><fmt:message
+                                    key="header.login.register"/></button>
+                            <input type="hidden" name="command" value="register"/>
+                        </form>
+                        <p id="reg-err"></p>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Закрыть</button>
-                        <button type="button" class="btn btn-primary">Сохранить изменения</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal"><fmt:message
+                                key="header.login.close"/></button>
                     </div>
                 </div>
             </div>
         </div>
-
 </body>
 </html>

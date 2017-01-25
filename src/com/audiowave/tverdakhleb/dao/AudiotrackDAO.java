@@ -37,8 +37,7 @@ public class AudiotrackDAO extends AbstractDAO<Audiotrack> {
     }
 
     @Override
-    public boolean create(Audiotrack entity) throws DAOException {
-        return false;
+    public void create(Audiotrack entity) throws DAOException {
     }
 
     @Override

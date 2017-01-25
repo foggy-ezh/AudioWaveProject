@@ -45,8 +45,7 @@ public class SingerDAO extends AbstractDAO<Singer> {
     }
 
     @Override
-    public boolean create(Singer entity) throws DAOException {
-        return false;
+    public void create(Singer entity) throws DAOException {
     }
 
     @Override

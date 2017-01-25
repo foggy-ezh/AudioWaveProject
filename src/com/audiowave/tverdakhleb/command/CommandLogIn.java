@@ -17,7 +17,7 @@ public class CommandLogIn implements ICommandAction{
     private static final Logger LOGGER = LogManager.getLogger();
     private static final String PARAM_LOGIN = "login";
     private static final String PARAM_PASSWORD = "password";
-    private static final String PARAM_SCRIPT = "script";
+    private static final String PARAM_LOGIN_ERR = "loginErr";
     private static final String ROLE = "role";
     private static final String CURRENT_USER = "currentUser";
 
@@ -26,15 +26,15 @@ public class CommandLogIn implements ICommandAction{
     @Override
     public String execute(HttpServletRequest request) throws IOException, ServletException {
         boolean proceed = true;
+        HttpSession session = request.getSession();
         String login = request.getParameter(PARAM_LOGIN);
         try {
             LogInCheckService service = new LogInCheckService();
             if(login == null || !service.checkLogin(login)|| !service.checkPassword(login,request.getParameter(PARAM_PASSWORD))) {
-                request.setAttribute(PARAM_SCRIPT,FAILED_MESSAGE);
+                session.setAttribute(PARAM_LOGIN_ERR,FAILED_MESSAGE);
                 proceed = false;
             }
             if(proceed){
-                HttpSession session = request.getSession();
                 User user = service.getCurrentUser(login);
                 if (user.isAdmin()){
                     session.setAttribute(ROLE, RoleType.ADMIN.getRole());
@@ -47,8 +47,10 @@ public class CommandLogIn implements ICommandAction{
         } catch (ServiceException e) {
             LOGGER.log(Level.ERROR,e);
         }
-        ICommandAction command = CommandType.getLastCommand(request);
-        return command.execute(request);
+
+        setProcessRedirect(request);
+        String previousPage = getPreviousPage(request);
+        return previousPage.equals("null") ? HOME_PAGE : previousPage;
     }
 }
 

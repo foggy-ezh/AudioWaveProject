@@ -34,7 +34,7 @@ public class ConnectionCreator {
     }
 
     public Connection getConnection(){
-        Connection connection = null;
+        Connection connection;
         try {
             connection = DriverManager.getConnection(dbUrl, properties);
         } catch (SQLException e) {

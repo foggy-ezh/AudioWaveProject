@@ -24,8 +24,8 @@ public class CommandChangeLanguage implements ICommandAction {
         } else {
             session.setAttribute(PARAM_LANGUAGE, DEFAULT_LOCALE_VALUE);
         }
-
-        ICommandAction command = CommandType.getLastCommand(request);
-        return command.execute(request);
+        setProcessRedirect(request);
+        String previousPage = getPreviousPage(request);
+        return previousPage.equals("null") ? HOME_PAGE : previousPage;
     }
 }

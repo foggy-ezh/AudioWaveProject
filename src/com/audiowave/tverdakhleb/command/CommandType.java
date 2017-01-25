@@ -15,25 +15,20 @@ public enum CommandType {
     LOG_IN {
         @Override
         public ICommandAction getCommand() {return new CommandLogIn();}
+    }
+    ,
+    REGISTER {
+        @Override
+        public ICommandAction getCommand() {return new CommandRegister();}
     };
 
     private static final Logger LOGGER = LogManager.getLogger();
     private static final String COMMAND = "command";
-    private static final String LAST_COMMAND = "last_command";
 
     abstract public ICommandAction getCommand();
 
-    static public ICommandAction getCurrentCommand(HttpServletRequest request){
+    public static ICommandAction defineCommand(HttpServletRequest request){
         String action = request.getParameter(COMMAND);
-        return defineCommand(action);
-    }
-
-    static public ICommandAction getLastCommand(HttpServletRequest request){
-        String action = String.valueOf(request.getSession().getAttribute(LAST_COMMAND));
-        return defineCommand(action);
-    }
-
-    static private ICommandAction defineCommand(String action){
         ICommandAction command = new EmptyCommand();
         if(action == null || action.isEmpty() || action.equals("null")){
             return command;

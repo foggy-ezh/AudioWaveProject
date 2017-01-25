@@ -25,6 +25,7 @@ public class EmptyCommand implements ICommandAction {
         } catch (ServiceException e) {
             LOGGER.log(Level.ERROR,e);
         }
+        setProcessForward(request);
         ConfigurationManager config = new ConfigurationManager();
         return config.getProperty(PATH_PAGE_MAIN);
     }
