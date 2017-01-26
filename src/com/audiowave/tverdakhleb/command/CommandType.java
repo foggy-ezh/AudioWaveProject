@@ -20,6 +20,10 @@ public enum CommandType {
     REGISTER {
         @Override
         public ICommandAction getCommand() {return new CommandRegister();}
+    },
+    SINGER {
+        @Override
+        public ICommandAction getCommand() {return new CommandSinger();}
     };
 
     private static final Logger LOGGER = LogManager.getLogger();

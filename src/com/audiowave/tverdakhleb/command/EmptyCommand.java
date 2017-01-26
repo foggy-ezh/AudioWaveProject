@@ -18,6 +18,7 @@ public class EmptyCommand implements ICommandAction {
     private static final String PATH_PAGE_MAIN = "path.page.main";
     @Override
     public String execute(HttpServletRequest request) throws IOException, ServletException {
+        setPreviousPage(request);
         HomePageService service = new HomePageService();
         try {
             request.setAttribute("albums", service.getPopularAlbum());

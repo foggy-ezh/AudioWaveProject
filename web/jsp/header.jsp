@@ -26,7 +26,6 @@
 <div class="container application">
     <div class="content">
         <nav role="navigation" class="navbar navbar-default .navbar-fixed-top">
-            <!-- Логотип и мобильное меню -->
             <div class="navbar-header">
                 <button type="button" data-target="#navbarCollapse" data-toggle="collapse" class="navbar-toggle">
                     <span class="sr-only">Toggle navigation</span>
@@ -36,16 +35,12 @@
                 </button>
                 <a href="#" class="navbar-brand logo"></a>
             </div>
-            <!-- Навигационное меню -->
             <div id="navbarCollapse" class="collapse navbar-collapse">
                 <ul class="nav navbar-nav">
                     <li><a href="#"><fmt:message key="header.main"/></a></li>
-                    <li><a href="#"><fmt:message key="header.singer"/></a></li>
+                    <li><a href="<c:url value="/AudioWave?command=singer"/>"><fmt:message key="header.singer"/></a></li>
                     <li><a href="#"><fmt:message key="header.album"/></a></li>
-                    <!-- Выподающие меню с подпунктами -->
-
                 </ul>
-                <!-- Поиск по сайту -->
                 <form role="search" class="navbar-form navbar-left">
                     <div class="form-group">
                         <input type="text" placeholder="<fmt:message key="header.search"/>" class="form-control">
@@ -76,7 +71,6 @@
                 </ul>
             </div>
         </nav>
-        <!-- Modal -->
         <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
              aria-hidden="true">
             <div class="modal-dialog modal-sm">

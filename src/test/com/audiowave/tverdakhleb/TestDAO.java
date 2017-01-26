@@ -2,15 +2,18 @@ package test.com.audiowave.tverdakhleb;
 
 import com.audiowave.tverdakhleb.dao.AlbumDAO;
 import com.audiowave.tverdakhleb.dao.AudiotrackDAO;
+import com.audiowave.tverdakhleb.dao.SingerDAO;
 import com.audiowave.tverdakhleb.dao.UserDAO;
 import com.audiowave.tverdakhleb.dbconnection.ConnectionPool;
 import com.audiowave.tverdakhleb.dbconnection.ProxyConnection;
 import com.audiowave.tverdakhleb.entity.Album;
 import com.audiowave.tverdakhleb.entity.Audiotrack;
+import com.audiowave.tverdakhleb.entity.Singer;
 import com.audiowave.tverdakhleb.entity.User;
 import com.audiowave.tverdakhleb.exception.DAOException;
 import org.testng.annotations.Test;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -58,6 +61,23 @@ public class TestDAO {
             UserDAO userDAO = new UserDAO(connection);
             userDAO.create(user);
             System.out.println(user.getId());
+        } catch ( DAOException e) {
+            e.printStackTrace();
+        } finally {
+            pool.restoreConnection(connection);
+            pool.closeConnections();
+        }
+    }
+
+    @Test
+    public void findSingerBySymbolTest(){
+        ConnectionPool pool = ConnectionPool.getInstance();
+        ProxyConnection connection = null;
+        try {
+            connection = pool.getConnection();
+            SingerDAO dao = new SingerDAO(connection);
+            int i = dao.findSingerBySymbol(new ArrayList<Singer>(), "%", 0, 5);
+            System.out.println("Total "+i);
         } catch ( DAOException e) {
             e.printStackTrace();
         } finally {

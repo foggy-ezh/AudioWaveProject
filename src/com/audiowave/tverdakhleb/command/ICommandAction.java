@@ -15,7 +15,7 @@ public interface ICommandAction {
     String execute(HttpServletRequest request) throws IOException, ServletException;
 
     default void setPreviousPage(HttpServletRequest request){
-        String uri = "URI"+request.getRequestURI()+'?'+request.getQueryString();
+        String uri = request.getRequestURI()+'?'+request.getQueryString();
         request.getSession().setAttribute(PREVIOUS_PAGE, uri);
     }
 
