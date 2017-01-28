@@ -4,6 +4,7 @@ import com.audiowave.tverdakhleb.dbconnection.ProxyConnection;
 import com.audiowave.tverdakhleb.entity.Audiotrack;
 import com.audiowave.tverdakhleb.exception.DAOException;
 
+import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
@@ -59,7 +60,7 @@ public class AudiotrackDAO extends AbstractDAO<Audiotrack> {
                     long id = resultSet.getLong(COLUMN_ID);
                     String name = resultSet.getString(COLUMN_NAME);
                     String location = resultSet.getString(COLUMN_LOCATION);
-                    double cost = resultSet.getDouble(COLUMN_COST);
+                    BigDecimal cost = resultSet.getBigDecimal(COLUMN_COST);
                     Boolean blocked = resultSet.getBoolean(COLUMN_BLOCKED);
                     long albumID = resultSet.getLong(COLUMN_ALBUM_ID);
                     list.add(new Audiotrack(id, name, location, cost, blocked, albumID));

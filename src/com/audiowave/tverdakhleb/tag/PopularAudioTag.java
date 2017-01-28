@@ -20,7 +20,7 @@ public class PopularAudioTag extends TagSupport {
                     pageContext.getOut().write(
                             "<div class=\"block\">\n" +
                                     "\t\t\t\t<div class=\"image\">\n" +
-                                    "\t\t\t\t\t<img class=\"img1\" src=\""+audio.getAlbumCoverURI()+"\"  width=\"300px\" height=\"300px\"" +
+                                    "\t\t\t\t\t<a href=\"/AudioWave?command=current_album&id="+audio.getAlbumId()+"\"><img class=\"img1\" src=\""+audio.getAlbumCoverURI()+"\"  width=\"300px\" height=\"300px\"" +
                                     " alt=\"" + audio.getSinger().getName() + "\"></a>\n" +
                                     "\t\t\t\t</div>\n" +
                                     "\t\t\t\t<div class=\"singer\">\n" +

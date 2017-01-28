@@ -24,7 +24,7 @@ public class SingerDAO extends AbstractDAO<Singer> {
             "WHERE singer_has_audio_track.featured_musician !=1 AND audio_track.audio_track_id = ?;";
     private static final String SQL_SELECT_FEATURED_BY_AUDIOTRACK_ID = "SELECT * FROM singer " +
             "INNER JOIN singer_has_audio_track " +
-            " ON singer.singer_id = singer_has_audio_track.singer_id " +
+            "ON singer.singer_id = singer_has_audio_track.singer_id " +
             "INNER JOIN audio_track " +
             "ON singer_has_audio_track.audio_track_id = audio_track.audio_track_id " +
             "WHERE singer_has_audio_track.featured_musician = 1 AND audio_track.audio_track_id = ?;";
@@ -100,12 +100,8 @@ public class SingerDAO extends AbstractDAO<Singer> {
         }
         return null;
     }
-    public Singer findFeaturedSingerByAudiotrackId(long id) throws DAOException {
-        List<Singer> list = findEntityByParameter(SQL_SELECT_FEATURED_BY_AUDIOTRACK_ID, String.valueOf(id), false);
-        if(list != null && !list.isEmpty()){
-            return list.get(0);
-        }
-        return null;
+    public List<Singer> findFeaturedSingerByAudiotrackId(long id) throws DAOException {
+        return findEntityByParameter(SQL_SELECT_FEATURED_BY_AUDIOTRACK_ID, String.valueOf(id), false);
     }
 
     public Singer findSingerByAlbumId(long id) throws DAOException {

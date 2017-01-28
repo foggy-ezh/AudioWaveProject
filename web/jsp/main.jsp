@@ -23,7 +23,7 @@
                 <div class="ws_images">
                     <ul>
                         <c:forEach var="album" items="${albums}" begin="0" end="4" varStatus="loop">
-                            <li><a href="#">
+                            <li><a href="<c:url value="/AudioWave?command=current_album&id=${album.id}"/>">
                                 <img src="${album.coverURI}" alt="${album.albumName}" title="${album.singer.name} - ${album.albumName}" id="wows0_${loop.current}"/>
                             </a></li>
                         </c:forEach></ul>

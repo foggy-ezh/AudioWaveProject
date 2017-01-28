@@ -1,16 +1,19 @@
 package com.audiowave.tverdakhleb.entity;
 
+import java.math.BigDecimal;
+import java.util.List;
+
 public class Audiotrack extends Entity {
     private String name;
     private String location;
-    private double cost;
+    private BigDecimal cost;
     private boolean blocked;
     private long albumId;
     private String albumCoverURI;
     private Singer singer;
-    private Singer featuredSinger;
+    private List<Singer> featuredSinger;
 
-    public Audiotrack(long id, String name, String location, double cost, boolean blocked, long albumId) {
+    public Audiotrack(long id, String name, String location, BigDecimal cost, boolean blocked, long albumId) {
         super(id);
         this.name = name;
         this.location = location;
@@ -35,11 +38,11 @@ public class Audiotrack extends Entity {
         this.location = location;
     }
 
-    public double getCost() {
+    public BigDecimal getCost() {
         return cost;
     }
 
-    public void setCost(double cost) {
+    public void setCost(BigDecimal cost) {
         this.cost = cost;
     }
 
@@ -75,12 +78,12 @@ public class Audiotrack extends Entity {
         this.singer = singer;
     }
 
-    public Singer getFeaturedSinger() {
-        return featuredSinger;
+    public void setFeaturedSinger(List<Singer> featuredSinger) {
+        this.featuredSinger = featuredSinger;
     }
 
-    public void setFeaturedSinger(Singer featuredSinger) {
-        this.featuredSinger = featuredSinger;
+    public List<Singer> getFeaturedSinger() {
+        return featuredSinger;
     }
 
     @Override
@@ -91,11 +94,11 @@ public class Audiotrack extends Entity {
 
         Audiotrack that = (Audiotrack) o;
 
-        if (Double.compare(that.cost, cost) != 0) return false;
         if (blocked != that.blocked) return false;
         if (albumId != that.albumId) return false;
         if (name != null ? !name.equals(that.name) : that.name != null) return false;
         if (location != null ? !location.equals(that.location) : that.location != null) return false;
+        if (cost != null ? !cost.equals(that.cost) : that.cost != null) return false;
         if (albumCoverURI != null ? !albumCoverURI.equals(that.albumCoverURI) : that.albumCoverURI != null)
             return false;
         if (singer != null ? !singer.equals(that.singer) : that.singer != null) return false;
@@ -105,11 +108,9 @@ public class Audiotrack extends Entity {
     @Override
     public int hashCode() {
         int result = super.hashCode();
-        long temp;
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (location != null ? location.hashCode() : 0);
-        temp = Double.doubleToLongBits(cost);
-        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        result = 31 * result + (cost != null ? cost.hashCode() : 0);
         result = 31 * result + (blocked ? 1 : 0);
         result = 31 * result + (int) (albumId ^ (albumId >>> 32));
         result = 31 * result + (albumCoverURI != null ? albumCoverURI.hashCode() : 0);
