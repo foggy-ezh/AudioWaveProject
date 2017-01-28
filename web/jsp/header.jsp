@@ -1,10 +1,3 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: Artem
-  Date: 16.01.2017
-  Time: 13:36
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
@@ -33,11 +26,11 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a href="#" class="navbar-brand logo"></a>
+                <a href="/AudioWave" class="navbar-brand logo"></a>
             </div>
             <div id="navbarCollapse" class="collapse navbar-collapse">
                 <ul class="nav navbar-nav">
-                    <li><a href="#"><fmt:message key="header.main"/></a></li>
+                    <li><a href="/AudioWave"><fmt:message key="header.main"/></a></li>
                     <li><a href="<c:url value="/AudioWave?command=singer"/>"><fmt:message key="header.singer"/></a></li>
                     <li><a href="#"><fmt:message key="header.album"/></a></li>
                 </ul>

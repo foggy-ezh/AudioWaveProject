@@ -22,16 +22,16 @@
             <div id="wowslider-container0">
                 <div class="ws_images">
                     <ul>
-                        <c:forEach var="albums" items="${albums}" begin="0" end="4" varStatus="loop">
+                        <c:forEach var="album" items="${albums}" begin="0" end="4" varStatus="loop">
                             <li><a href="#">
-                                <img src="${albums.coverURI}" alt="${albums.albumName}"title="${albums.singerName} - ${albums.albumName}" id="wows0_${loop.current}"/>
+                                <img src="${album.coverURI}" alt="${album.albumName}" title="${album.singer.name} - ${album.albumName}" id="wows0_${loop.current}"/>
                             </a></li>
                         </c:forEach></ul>
                 </div>
                 <div class="ws_bullets">
                     <div>
-                        <c:forEach var="albums" items="${albums}" begin="0" end="4" varStatus="loop">
-                            <a href="#" title="${albums.albumName}"><span>${loop.current}</span></a>
+                        <c:forEach var="albums" items="${album}" begin="0" end="4" varStatus="loop">
+                            <a href="#" title="${album.albumName}"><span>${loop.current}</span></a>
                         </c:forEach>
                         <div class="ws_shadow"></div>
                     </div>

@@ -20,6 +20,7 @@ public class AudiotrackDAO extends AbstractDAO<Audiotrack> {
             " audio1.audio_track_location, audio1.audio_track_blocked, audio1.album_id, audio1.audio_track_cost, audio3.COUNT FROM audio_track AS audio1" +
             " INNER JOIN ( SELECT COUNT(user_id) AS COUNT,audio_track_id FROM user_has_audio_track GROUP BY audio_track_id ) AS audio3" +
             " ON audio1.audio_track_id = audio3.audio_track_id WHERE audio1.audio_track_blocked = 0) as t1 ORDER BY COUNT DESC limit 9;";
+    private static final String SQL_SELECT_BY_ALBUM_ID = "SELECT * FROM audio_track WHERE audio_track.album_id = ?;";
 
     public AudiotrackDAO(ProxyConnection connection) {
         super(connection);
@@ -71,5 +72,9 @@ public class AudiotrackDAO extends AbstractDAO<Audiotrack> {
 
     public List<Audiotrack> findPopularAudiotrack() throws DAOException {
         return findResultSet(SQL_SELECT_POPULAR, false);
+    }
+
+    public List<Audiotrack> findAudiotrackByAlbumId(long albumId) throws DAOException {
+        return findEntityByParameter(SQL_SELECT_BY_ALBUM_ID, String.valueOf(albumId), false);
     }
 }

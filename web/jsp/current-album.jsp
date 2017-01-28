@@ -11,24 +11,26 @@
 <body>
 <%@include file="header.jsp" %>
 <c:choose>
-    <c:when test="${singerNotFound}">
+    <c:when test="${albumNotFound}">
         <ul class="breadcrumb">
-            <li><a href="<c:url value="/AudioWave?command=singer"/>"><fmt:message key="singer.all"/></a></li>
+            <li><a href="<c:url value="/AudioWave?command=album"/>"><fmt:message key="album.all"/></a></li>
         </ul>
         <hr>
         <div class="mainbox">
-            <h1><fmt:message key="singer.not.found"/></h1>
+            <h1><fmt:message key="album.not.found"/></h1>
         </div>
     </c:when>
     <c:otherwise>
         <ul class="breadcrumb">
-            <li><a href="<c:url value="/AudioWave?command=singer"/>"><fmt:message key="singer.all"/></a></li>
-            <li><a href="<c:url value="/AudioWave?command=singer&symbol=${symbol}"/>">${symbol}</a></li>
-            <li class="active">${singer.name}</li>
+            <li><a href="<c:url value="/AudioWave?command=album"/>"><fmt:message key="album.all"/></a></li>
+            <li><a href="<c:url value="/AudioWave?command=album&symbol=${symbol}"/>">${symbol}</a></li>
+            <li class="active">${album.albumName}</li>
         </ul>
         <hr>
         <div class="mainbox">
-            <h1>${singer.name}</h1>
+            <h1>
+                <a href="<c:url value="/AudioWave?command=current_singer&id=${album.singer.id}"/>">${album.singer.name}</a>
+            </h1>
         </div>
         <hr>
         <div class="zag">
@@ -42,7 +44,7 @@
                     </div>
                 </c:when>
                 <c:otherwise>
-                    <c:forEach items="${singer.albums}" var="item">
+                    <c:forEach items="${albums}" var="item">
                         <div class="album">
                             <div class="image">
                                 <img class="img1" src="${item.coverURI}" width="300px" height="300px"

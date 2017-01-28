@@ -7,8 +7,8 @@ public class Audiotrack extends Entity {
     private boolean blocked;
     private long albumId;
     private String albumCoverURI;
-    private long singerId;
-    private String singerName;
+    private Singer singer;
+    private Singer featuredSinger;
 
     public Audiotrack(long id, String name, String location, double cost, boolean blocked, long albumId) {
         super(id);
@@ -67,39 +67,39 @@ public class Audiotrack extends Entity {
         this.albumCoverURI = albumCoverURI;
     }
 
-    public long getSingerId() {
-        return singerId;
+    public Singer getSinger() {
+        return singer;
     }
 
-    public void setSingerId(long singerId) {
-        this.singerId = singerId;
+    public void setSinger(Singer singer) {
+        this.singer = singer;
     }
 
-    public String getSingerName() {
-        return singerName;
+    public Singer getFeaturedSinger() {
+        return featuredSinger;
     }
 
-    public void setSingerName(String singerName) {
-        this.singerName = singerName;
+    public void setFeaturedSinger(Singer featuredSinger) {
+        this.featuredSinger = featuredSinger;
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o){ return true; }
-        if (o == null || getClass() != o.getClass()){ return false; }
-        if (!super.equals(o)){ return false; }
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
 
         Audiotrack that = (Audiotrack) o;
 
-        if (Double.compare(that.cost, cost) != 0){ return false; }
-        if (blocked != that.blocked){ return false; }
-        if (albumId != that.albumId){ return false; }
-        if (singerId != that.singerId){ return false; }
-        if (name != null ? !name.equals(that.name) : that.name != null){ return false; }
-        if (location != null ? !location.equals(that.location) : that.location != null){ return false; }
-        if (albumCoverURI != null ? !albumCoverURI.equals(that.albumCoverURI) : that.albumCoverURI != null){
-            return false;}
-        return singerName != null ? singerName.equals(that.singerName) : that.singerName == null;
+        if (Double.compare(that.cost, cost) != 0) return false;
+        if (blocked != that.blocked) return false;
+        if (albumId != that.albumId) return false;
+        if (name != null ? !name.equals(that.name) : that.name != null) return false;
+        if (location != null ? !location.equals(that.location) : that.location != null) return false;
+        if (albumCoverURI != null ? !albumCoverURI.equals(that.albumCoverURI) : that.albumCoverURI != null)
+            return false;
+        if (singer != null ? !singer.equals(that.singer) : that.singer != null) return false;
+        return featuredSinger != null ? featuredSinger.equals(that.featuredSinger) : that.featuredSinger == null;
     }
 
     @Override
@@ -113,8 +113,8 @@ public class Audiotrack extends Entity {
         result = 31 * result + (blocked ? 1 : 0);
         result = 31 * result + (int) (albumId ^ (albumId >>> 32));
         result = 31 * result + (albumCoverURI != null ? albumCoverURI.hashCode() : 0);
-        result = 31 * result + (int) (singerId ^ (singerId >>> 32));
-        result = 31 * result + (singerName != null ? singerName.hashCode() : 0);
+        result = 31 * result + (singer != null ? singer.hashCode() : 0);
+        result = 31 * result + (featuredSinger != null ? featuredSinger.hashCode() : 0);
         return result;
     }
 }

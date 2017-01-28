@@ -24,6 +24,14 @@ public enum CommandType {
     SINGER {
         @Override
         public ICommandAction getCommand() {return new CommandSinger();}
+    },
+    CURRENT_SINGER {
+        @Override
+        public ICommandAction getCommand() {return new CommandCurrentSinger();}
+    },
+    CURRENT_ALBUM {
+        @Override
+        public ICommandAction getCommand() {return new CommandCurrentAlbum();}
     };
 
     private static final Logger LOGGER = LogManager.getLogger();

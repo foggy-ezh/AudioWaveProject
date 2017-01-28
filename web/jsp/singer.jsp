@@ -30,18 +30,23 @@
     </c:choose>
 </ul>
 <hr>
-<div class="all-singers">
+<div class="text-align-center">
     <c:choose>
-        <c:when test="${notFound== 'true'}">
-            <div>
-                <p><fmt:message key="singer.not.found"/></p>
+        <c:when test="${notFound}">
+            <div class="mainbox">
+                <h1><fmt:message key="singer.not.found"/></h1>
             </div>
+            <hr>
         </c:when>
-        <c:otherwise><c:forEach items="${singers}" var="item">
-            <div>
-                <p><a href="<c:url value="/AudioWave?command=current_singer&symbol=${item.id}"/>">${item.name}</a></p>
+        <c:otherwise>
+            <div class="all-singers">
+                <c:forEach items="${singers}" var="item">
+                    <div>
+                        <p><a href="<c:url value="/AudioWave?command=current_singer&id=${item.id}"/>">${item.name}</a>
+                        </p>
+                    </div>
+                </c:forEach>
             </div>
-        </c:forEach>
         </c:otherwise>
     </c:choose>
 </div>

@@ -17,11 +17,14 @@ public class AlbumDAO extends AbstractDAO<Album> {
     private static final String COLUMN_BLOCKED = "album_blocked";
 
     private static final String SQL_SELECT_BY_ID = "SELECT * FROM album WHERE album_id=?";
-    private static final String SQL_SELECT_POPULAR ="SELECT * FROM album AS album1 INNER JOIN (SELECT * FROM " +
+    private static final String SQL_SELECT_POPULAR = "SELECT * FROM album AS album1 INNER JOIN (SELECT * FROM " +
             "(SELECT audio1.audio_track_id, audio1.audio_track_blocked, audio1.album_id, audio3.COUNT FROM audio_track AS audio1 " +
             "INNER JOIN (SELECT COUNT(user_id) AS COUNT, audio_track_id FROM user_has_audio_track GROUP BY audio_track_id ) AS audio3 " +
             "ON audio1.audio_track_id = audio3.audio_track_id WHERE audio1.audio_track_blocked = 0) as t1 GROUP BY album_id) as t2" +
             " ON album1.album_id = t2.album_id WHERE album1.album_blocked = 0 ORDER BY COUNT DESC LIMIT 4;\n";
+    private static final String SQL_SELECT_BY_SINGER_ID = "SELECT t1.* FROM album AS t1 INNER JOIN audio_track AS t2 ON t1.album_id=t2.album_id" +
+            " INNER JOIN singer_has_audio_track AS t3 ON t2.audio_track_id=t3.audio_track_id INNER JOIN singer AS t4 ON t3.singer_id=t4.singer_id" +
+            "  WHERE t3.featured_musician != 1 AND t1.album_blocked !=1 AND t4.singer_id = ?  GROUP BY t1.album_id;";
 
     public AlbumDAO(ProxyConnection connection) {
         super(connection);
@@ -53,7 +56,7 @@ public class AlbumDAO extends AbstractDAO<Album> {
 
     @Override
     void parseResultSet(ResultSet resultSet, List<Album> list) throws DAOException {
-        if (resultSet != null){
+        if (resultSet != null) {
             try {
                 while (resultSet.next()) {
                     long id = resultSet.getLong(COLUMN_ID);
@@ -71,10 +74,14 @@ public class AlbumDAO extends AbstractDAO<Album> {
 
     public Album findAlbumById(long id) throws DAOException {
         List<Album> list = findEntityByParameter(SQL_SELECT_BY_ID, String.valueOf(id), false);
-        if(list != null && !list.isEmpty()){
+        if (list != null && !list.isEmpty()) {
             return list.get(0);
         }
         return null;
+    }
+
+    public List<Album> findAlbumBySingerId(long id) throws DAOException {
+        return findEntityByParameter(SQL_SELECT_BY_SINGER_ID, String.valueOf(id), false);
     }
 
     public List<Album> findPopularAlbums() throws DAOException {

@@ -21,10 +21,10 @@ public class PopularAudioTag extends TagSupport {
                             "<div class=\"block\">\n" +
                                     "\t\t\t\t<div class=\"image\">\n" +
                                     "\t\t\t\t\t<img class=\"img1\" src=\""+audio.getAlbumCoverURI()+"\"  width=\"300px\" height=\"300px\"" +
-                                    " alt=\"" + audio.getSingerName() + "\"></a>\n" +
+                                    " alt=\"" + audio.getSinger().getName() + "\"></a>\n" +
                                     "\t\t\t\t</div>\n" +
                                     "\t\t\t\t<div class=\"singer\">\n" +
-                                    "\t\t\t\t\t<p>"+audio.getSingerName()+"</p>\n" +
+                                    "\t\t\t\t\t<p><a href=\"/AudioWave?command=current_singer&id="+audio.getSinger().getId()+"\">"+audio.getSinger().getName()+"</a></p>\n" +
                                     "\t\t\t\t</div>\n" +
                                     "\t\t\t\t<div class=\"song\">\n" +
                                     "\t\t\t\t\t<p>"+audio.getName()+"</p>\n" +

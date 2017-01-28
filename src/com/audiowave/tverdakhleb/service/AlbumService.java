@@ -2,61 +2,57 @@ package com.audiowave.tverdakhleb.service;
 
 import com.audiowave.tverdakhleb.dao.AlbumDAO;
 import com.audiowave.tverdakhleb.dao.AudiotrackDAO;
+import com.audiowave.tverdakhleb.dao.CommentDAO;
 import com.audiowave.tverdakhleb.dao.SingerDAO;
 import com.audiowave.tverdakhleb.dbconnection.ConnectionPool;
 import com.audiowave.tverdakhleb.dbconnection.ProxyConnection;
 import com.audiowave.tverdakhleb.entity.Album;
 import com.audiowave.tverdakhleb.entity.Audiotrack;
-import com.audiowave.tverdakhleb.entity.Singer;
 import com.audiowave.tverdakhleb.exception.DAOException;
 import com.audiowave.tverdakhleb.exception.ServiceException;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class HomePageService extends AbstractService {
-    public List<Album> getPopularAlbum() throws ServiceException {
+public class AlbumService extends AbstractService {
+
+    public List<Album> getSingerAlbums(long singerId) throws ServiceException {
         ConnectionPool pool = ConnectionPool.getInstance();
         ProxyConnection connection = null;
-        List<Album> list;
         try {
             connection = pool.getConnection();
             AlbumDAO albumDAO = new AlbumDAO(connection);
-            list = albumDAO.findPopularAlbums();
-            SingerDAO singerDAO = new SingerDAO(connection);
-            for(Album album : list){
-                Singer singer = singerDAO.findSingerByAlbumId(album.getId());
-                album.setSinger(singer);
-            }
+            return albumDAO.findAlbumBySingerId(singerId);
         } catch ( DAOException e) {
             throw new ServiceException(e);
         }finally {
             restorePoolConnection(pool, connection);
         }
-        return list;
+    }
+    public Album getAlbumById(long id) throws ServiceException {
+        ConnectionPool pool = ConnectionPool.getInstance();
+        ProxyConnection connection = null;
+        try {
+            connection = pool.getConnection();
+            AlbumDAO albumDAO = new AlbumDAO(connection);
+            Album album = albumDAO.findAlbumById(id);
+            if(album != null){
+                AudiotrackDAO audiotrackDAO = new AudiotrackDAO(connection);
+                album.setAudiotracks(audiotrackDAO.findAudiotrackByAlbumId(album.getId()));
+                SingerDAO singerDAO = new SingerDAO(connection);
+                for (Audiotrack audiotrack : album.getAudiotracks()) {
+                 audiotrack.setFeaturedSinger(singerDAO.findFeaturedSingerByAudiotrackId(audiotrack.getId()));
+                }
+                album.setSinger(singerDAO.findSingerByAlbumId(album.getId()));
+                CommentDAO commentDAO = new CommentDAO(connection);
+                album.setAlbumComments(commentDAO.findCommentsByAlbumId(album.getId()));
+            }
+            return album;
+        } catch ( DAOException e) {
+            throw new ServiceException(e);
+        }finally {
+            restorePoolConnection(pool, connection);
+        }
     }
 
-    public List<Audiotrack> getPopularAudiotrack() throws ServiceException {
-        ConnectionPool pool = ConnectionPool.getInstance();
-        ProxyConnection connection = null;
-        List<Audiotrack> list;
-        try {
-            connection = pool.getConnection();
-            AudiotrackDAO audiotrackDAO = new AudiotrackDAO(connection);
-            list = audiotrackDAO.findPopularAudiotrack();
-            AlbumDAO albumDAO = new AlbumDAO(connection);
-            SingerDAO singerDAO = new SingerDAO(connection);
-            for(Audiotrack audio : list){
-                Album album = albumDAO.findAlbumById(audio.getAlbumId());
-                audio.setAlbumCoverURI(album.getCoverURI());
-                Singer singer = singerDAO.findSingerByAudiotrackId(audio.getId());
-                audio.setSinger(singer);
-            }
-        } catch ( DAOException e) {
-            throw new ServiceException(e);
-        }finally {
-            restorePoolConnection(pool, connection);
-        }
-        return list;
-    }
 }

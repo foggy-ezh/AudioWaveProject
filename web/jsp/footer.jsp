@@ -1,10 +1,3 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: Artem
-  Date: 16.01.2017
-  Time: 16:00
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -32,6 +25,16 @@
 <script src="../js/wowslider.js"></script>
 <script src="../js/script.js"></script>
 <script src="../js/audioplayer.js"></script>
+<script type="text/javascript">
+    document.addEventListener('play', function(e){
+        var audios = document.getElementsByTagName('audio');
+        for(var i = 0, len = audios.length; i < len;i++){
+            if(audios[i] != e.target){
+                audios[i].pause();
+            }
+        }
+    }, true);
+</script>
 <script>
     $(function () {
         $('audio').audioPlayer();

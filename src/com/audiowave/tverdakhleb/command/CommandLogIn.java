@@ -21,8 +21,6 @@ public class CommandLogIn implements ICommandAction{
     private static final String ROLE = "role";
     private static final String CURRENT_USER = "currentUser";
 
-    private static final String FAILED_MESSAGE="true";
-
     @Override
     public String execute(HttpServletRequest request) throws IOException, ServletException {
         boolean proceed = true;
@@ -31,7 +29,7 @@ public class CommandLogIn implements ICommandAction{
         try {
             LogInCheckService service = new LogInCheckService();
             if(login == null || !service.checkLogin(login)|| !service.checkPassword(login,request.getParameter(PARAM_PASSWORD))) {
-                session.setAttribute(PARAM_LOGIN_ERR,FAILED_MESSAGE);
+                session.setAttribute(PARAM_LOGIN_ERR,true);
                 proceed = false;
             }
             if(proceed){

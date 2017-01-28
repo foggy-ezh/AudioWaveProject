@@ -58,7 +58,8 @@ public class CommandSinger implements ICommandAction {
             }else{
             request.setAttribute(PARAM_SINGERS, singers);}
         } catch (ServiceException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.ERROR, e);
+            request.setAttribute(PARAM_NOT_FOUND, true);
         }
         setProcessForward(request);
         ConfigurationManager config = new ConfigurationManager();

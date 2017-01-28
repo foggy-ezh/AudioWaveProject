@@ -23,7 +23,6 @@ public class CommandRegister implements ICommandAction {
     private static final String PARAM_LAST_NAME = "mail";
 
     private static final String PARAM_LOGIN_ERR = "regErr";
-    private static final String FAILED_MESSAGE="true";
     private static final String FAILED_MESSAGE_LOGIN="login";
     private static final String FAILED_MESSAGE_SUCCESS="success";
 
@@ -48,7 +47,7 @@ public class CommandRegister implements ICommandAction {
                 if(service.addUser(user)){
                     session.setAttribute(PARAM_LOGIN_ERR,FAILED_MESSAGE_SUCCESS);
                 }else{
-                    session.setAttribute(PARAM_LOGIN_ERR,FAILED_MESSAGE);
+                    session.setAttribute(PARAM_LOGIN_ERR,true);
                 }
             }
         } catch (ServiceException e) {
