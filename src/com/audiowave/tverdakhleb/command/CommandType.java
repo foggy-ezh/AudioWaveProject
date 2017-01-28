@@ -15,8 +15,11 @@ public enum CommandType {
     LOG_IN {
         @Override
         public ICommandAction getCommand() {return new CommandLogIn();}
-    }
-    ,
+    },
+    LOG_OUT {
+        @Override
+        public ICommandAction getCommand() {return new CommandLogOut();}
+    },
     REGISTER {
         @Override
         public ICommandAction getCommand() {return new CommandRegister();}
@@ -24,6 +27,10 @@ public enum CommandType {
     SINGER {
         @Override
         public ICommandAction getCommand() {return new CommandSinger();}
+    },
+    ALBUM {
+        @Override
+        public ICommandAction getCommand() {return new CommandAlbum();}
     },
     CURRENT_SINGER {
         @Override

@@ -13,7 +13,7 @@
 <div id="alphabet-nav">
     <span>
         <c:forEach items="${letters}" var="item">
-            <a href="<c:url value="/AudioWave?command=singer&symbol=${item}"/>">${item}</a>
+            <a href="<c:url value="/AudioWave?command=album&symbol=${item}"/>">${item}</a>
         </c:forEach>
     </span>
 </div>
@@ -21,10 +21,10 @@
 <ul class="breadcrumb">
     <c:choose>
         <c:when test="${symbol eq '%'}">
-            <li class="active"><fmt:message key="singer.all"/></li>
+            <li class="active"><fmt:message key="album.all"/></li>
         </c:when>
         <c:otherwise>
-            <li><a href="/AudioWave?command=singer"><fmt:message key="singer.all"/></a></li>
+            <li><a href="<c:url value="/AudioWave?command=album"/>"><fmt:message key="album.all"/></a></li>
             <li class="active">${symbol}</li>
         </c:otherwise>
     </c:choose>
@@ -32,17 +32,22 @@
 <hr>
 <div class="text-align-center">
     <c:choose>
-        <c:when test="${empty singers}">
+        <c:when test="${empty albums}">
             <div class="mainbox">
-                <h1><fmt:message key="singer.not.found"/></h1>
+                <h1><fmt:message key="album.not.found"/></h1>
             </div>
             <hr>
         </c:when>
         <c:otherwise>
             <div class="all-singers">
-                <c:forEach items="${singers}" var="item">
+                <c:forEach items="${albums}" var="item">
                     <div>
-                        <p><a href="<c:url value="/AudioWave?command=current_singer&id=${item.id}"/>">${item.name}</a>
+                        <p><a href="<c:url value="/AudioWave?command=current_album&id=${item.id}"/>">
+                        ${item.albumName}
+                            <c:if test="${item.blocked}">
+                                <fmt:message key="info.blocked"/>
+                            </c:if>
+                        </a>
                         </p>
                     </div>
                 </c:forEach>
@@ -50,7 +55,7 @@
         </c:otherwise>
     </c:choose>
 </div>
-<c:if test="${not empty singers}">
+<c:if test="${not empty albums}">
     <div class="pagin">
         <ul class="pagination">
             <c:forEach begin="1" end="${total}" var="i">
@@ -60,7 +65,7 @@
                     </c:when>
                     <c:otherwise>
                         <li class="active"><a
-                                href="<c:url value="/AudioWave?command=singer&symbol=${symbol}&page=${i}"/>">${i}</a>
+                                href="<c:url value="/AudioWave?command=album&symbol=${symbol}&page=${i}"/>">${i}</a>
                         </li>
                     </c:otherwise>
                 </c:choose>

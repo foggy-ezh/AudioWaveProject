@@ -40,8 +40,8 @@ public class SingerDAO extends AbstractDAO<Singer> {
     private static final String SQL_SELECT_LETTER ="SELECT UPPER ( SUBSTRING(singer_name, 1, 1)) AS letter " +
             "FROM singer GROUP BY letter ORDER BY letter;";
     private static final String SQL_SELECT_BY_SYMBOL ="SELECT SQL_CALC_FOUND_ROWS * FROM(SELECT singer_id, singer_name,SUBSTRING(singer_name, 1, 1) AS letter " +
-            "FROM singer ORDER BY singer_name) as singer1 WHERE singer1.letter LIKE ? LIMIT ?, ?;";
-    private static final String SQL_SELECT_ROWS ="SELECT FOUND_ROWS();";
+            " FROM singer ORDER BY singer_name) as singer1 WHERE singer1.letter LIKE ? LIMIT ? , ? ;";
+
     public SingerDAO(ProxyConnection connection) {
         super(connection);
     }
@@ -112,41 +112,11 @@ public class SingerDAO extends AbstractDAO<Singer> {
         return null;
     }
 
-    public List<String> findFirstLetter() throws DAOException {
-        List<String> list = new ArrayList<>();
-        Statement stmt = null;
-        try {
-            stmt = connection.createStatement();
-            ResultSet resultSet = stmt.executeQuery(SQL_SELECT_LETTER);
-            while (resultSet.next()) {
-                list.add(resultSet.getString(1));
-            }
-        } catch (SQLException e) {
-            throw new DAOException(e);
-        } finally {
-            this.close(stmt);
-        }
-        return list;
+    public List<String> findSingerFirstLetter() throws DAOException {
+        return findFirstLetter(SQL_SELECT_LETTER);
     }
 
     public int findSingerBySymbol(List<Singer> list, String symbol, int start, int count) throws DAOException {
-        PreparedStatement stmt = null;
-        try {
-            stmt = connection.prepareStatement(SQL_SELECT_BY_SYMBOL);
-            stmt.setString(1, symbol);
-            stmt.setInt(2, start);
-            stmt.setInt(3, count);
-            ResultSet resultSet = stmt.executeQuery();
-            parseResultSet(resultSet, list);
-            ResultSet rs = stmt.executeQuery(SQL_SELECT_ROWS);
-            int totalCount=0;
-            if(rs.next()){
-                totalCount = rs.getInt(1);}
-                return totalCount;
-        } catch (SQLException e) {
-            throw new DAOException(e);
-        } finally {
-            this.close(stmt);
-        }
+        return findEntityBySymbol(SQL_SELECT_BY_SYMBOL, list, symbol, start, count);
     }
 }

@@ -30,9 +30,9 @@
             </div>
             <div id="navbarCollapse" class="collapse navbar-collapse">
                 <ul class="nav navbar-nav">
-                    <li><a href="/AudioWave"><fmt:message key="header.main"/></a></li>
+                    <li><a href="<c:url value="/AudioWave"/>"><fmt:message key="header.main"/></a></li>
                     <li><a href="<c:url value="/AudioWave?command=singer"/>"><fmt:message key="header.singer"/></a></li>
-                    <li><a href="#"><fmt:message key="header.album"/></a></li>
+                    <li><a href="<c:url value="/AudioWave?command=album"/>"><fmt:message key="header.album"/></a></li>
                 </ul>
                 <form role="search" class="navbar-form navbar-left">
                     <div class="form-group">
@@ -43,7 +43,7 @@
                 </form>
                 <ul class="nav navbar-nav navbar-right">
                     <c:choose>
-                        <c:when test="${sessionScope.get('role')== 'guest'}">
+                        <c:when test="${role eq 'guest'}">
                             <li><a href="#myModal" data-toggle="modal"><fmt:message key="header.auth"/></a></li>
                         </c:when>
                         <c:otherwise>
@@ -56,7 +56,9 @@
                                     <li><a href="#">Моя аудиотека</a></li>
                                     <li><a href="#">Настройки</a></li>
                                     <li class="divider"></li>
-                                    <li><a href="#"><fmt:message key="header.exit"/></a></li>
+                                    <li><a href="<c:url value="/AudioWave?command=log_out"/>">
+                                        <fmt:message key="header.exit"/>
+                                    </a></li>
                                 </ul>
                             </li>
                         </c:otherwise>
@@ -84,9 +86,11 @@
                             <input type="hidden" name="command" value="log_in"/>
                         </form>
                         <p id="login-err"></p>
-                        <p><fmt:message key="header.login.not.reg"/> <a href="#myModall"
-                                                                        data-toggle="modal"><fmt:message
-                                key="header.login.register"/></a></p>
+                        <p><fmt:message key="header.login.not.reg"/>
+                            <a href="#myModall" data-toggle="modal" class="fire-brick">
+                                <fmt:message key="header.login.register"/>
+                            </a>
+                        </p>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal"><fmt:message

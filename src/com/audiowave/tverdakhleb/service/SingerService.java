@@ -10,13 +10,9 @@ import com.audiowave.tverdakhleb.exception.ServiceException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SingerService extends AbstractService{
- private static final int RECORDS_PER_PAGE = 10;
- private int totalPages = 0;
 
-    public int getTotalPages() {
-        return totalPages;
-    }
+public class SingerService extends AbstractService{
+
 
     public List<String> getSingerStartLetter() throws ServiceException {
         ConnectionPool pool = ConnectionPool.getInstance();
@@ -24,7 +20,7 @@ public class SingerService extends AbstractService{
         try {
             connection = pool.getConnection();
             SingerDAO singerDAO = new SingerDAO(connection);
-            return singerDAO.findFirstLetter();
+            return singerDAO.findSingerFirstLetter();
         } catch ( DAOException e) {
             throw new ServiceException(e);
         }finally {

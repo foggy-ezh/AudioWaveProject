@@ -6,6 +6,8 @@ import com.audiowave.tverdakhleb.exception.DAOException;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 
 public class AlbumDAO extends AbstractDAO<Album> {
@@ -25,6 +27,16 @@ public class AlbumDAO extends AbstractDAO<Album> {
     private static final String SQL_SELECT_BY_SINGER_ID = "SELECT t1.* FROM album AS t1 INNER JOIN audio_track AS t2 ON t1.album_id=t2.album_id" +
             " INNER JOIN singer_has_audio_track AS t3 ON t2.audio_track_id=t3.audio_track_id INNER JOIN singer AS t4 ON t3.singer_id=t4.singer_id" +
             "  WHERE t3.featured_musician != 1 AND t1.album_blocked !=1 AND t4.singer_id = ?  GROUP BY t1.album_id;";
+    private static final String SQL_SELECT_LETTER_NOT_BLOCKED ="SELECT UPPER ( SUBSTRING(album_name, 1, 1)) AS letter "+
+    "FROM album WHERE album_blocked = 0 GROUP BY letter ORDER BY letter;";
+    private static final String SQL_SELECT_LETTER = "SELECT UPPER ( SUBSTRING(album_name, 1, 1)) AS letter \n" +
+            "FROM album GROUP BY letter ORDER BY letter;";
+    private static final String SQL_SELECT_BY_SYMBOL ="SELECT SQL_CALC_FOUND_ROWS * FROM(SELECT album_id, album_name, album_cover, " +
+            "album_release_year, album_blocked ,SUBSTRING(album_name, 1, 1) AS letter FROM album ORDER BY album_name) as album1 \n" +
+            "WHERE album1.letter LIKE ? LIMIT ?, ?;";
+    private static final String SQL_SELECT_BY_SYMBOL_NOT_BLOCKED ="SELECT SQL_CALC_FOUND_ROWS * FROM(SELECT album_id, album_name, album_cover, " +
+            "album_release_year, album_blocked ,SUBSTRING(album_name, 1, 1) AS letter FROM album ORDER BY album_name) as album1 \n" +
+            "WHERE album1.letter LIKE ? AND album1.album_blocked = 0 LIMIT ?, ?;";
 
     public AlbumDAO(ProxyConnection connection) {
         super(connection);
@@ -87,4 +99,19 @@ public class AlbumDAO extends AbstractDAO<Album> {
     public List<Album> findPopularAlbums() throws DAOException {
         return findResultSet(SQL_SELECT_POPULAR, false);
     }
+
+    public List<String> findNonBlockedAlbumFirstLetter() throws DAOException {
+        return findFirstLetter(SQL_SELECT_LETTER_NOT_BLOCKED);
+    }
+    public List<String> findAllAlbumFirstLetter() throws DAOException {
+        return findFirstLetter(SQL_SELECT_LETTER);
+    }
+
+    public int findNonBlockedAlbumBySymbol(List<Album> list, String symbol, int start, int count) throws DAOException {
+        return findEntityBySymbol(SQL_SELECT_BY_SYMBOL_NOT_BLOCKED, list, symbol, start, count);
+    }
+    public int findAllAlbumBySymbol(List<Album> list, String symbol, int start, int count) throws DAOException {
+        return findEntityBySymbol(SQL_SELECT_BY_SYMBOL, list, symbol, start, count);
+    }
+
 }

@@ -11,7 +11,7 @@
 <body>
 <%@include file="header.jsp" %>
 <c:choose>
-    <c:when test="${albumNotFound}">
+    <c:when test="${empty album}">
         <ul class="breadcrumb">
             <li><a href="<c:url value="/AudioWave?command=album"/>"><fmt:message key="album.all"/></a></li>
         </ul>
@@ -42,7 +42,7 @@
         <hr>
         <div class="audio-list-container">
             <c:choose>
-                <c:when test="${audiotracksNotFound}">
+                <c:when test="${empty album.audiotracks}">
                     <div>
                         <h3><fmt:message key="album.song.not.found"/></h3>
                     </div>
@@ -51,7 +51,7 @@
                     <c:forEach items="${album.audiotracks}" var="item">
                         <div class="audio-list">
                             <c:choose>
-                                <c:when test="${sessionScope.get('role')== 'admin'}">
+                                <c:when test="${role eq 'admin'}">
                                     <c:choose>
                                         <c:when test="${item.blocked}">
                                             <div class="inline-block">
@@ -145,12 +145,12 @@
                             <p><b>${curcomment.userLogin}</b><br>
                                     ${curcomment.comment}
                             </p>
-                            <c:if test="${curcomment.userId == currentUser.id}">
+                            <c:if test="${(curcomment.userId eq currentUser.id) or(role eq 'admin')}">
                                 <form>
                                     <button type="submit" class="btn-buy"><fmt:message
                                             key="btn.delete"/></button>
                                     <input type="hidden" name="command" value="delete_comment"/>
-                                    <input type="hidden" name="userId" value="${currentUser.id}"/>
+                                    <input type="hidden" name="userId" value="${curcomment.userId}"/>
                                     <input type="hidden" name="albumId" value="${album.id}"/>
                                     <input type="hidden" name="comment" value="${curcomment.id}"/>
                                 </form>
@@ -167,13 +167,13 @@
             <hr>
             <div class="text-align-center">
                 <c:choose>
-                    <c:when test="${sessionScope.get('role')== 'guest'}">
+                    <c:when test="${role eq 'guest'}">
                         <h4><fmt:message key="album.login.to.comment."/></h4>
                     </c:when>
                     <c:otherwise>
                         <form>
                             <h4><fmt:message key="album.comment.your"/></h4>
-                            <textarea name="Text1"></textarea><br>
+                            <textarea name="Text1" title="Comment"></textarea><br>
                             <button type="submit" class="btn" id="login-btn">
                                 <fmt:message key="album.comment.add"/>
                             </button>

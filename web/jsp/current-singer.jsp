@@ -11,7 +11,7 @@
 <body>
 <%@include file="header.jsp" %>
 <c:choose>
-    <c:when test="${singerNotFound}">
+    <c:when test="${empty singer}">
         <ul class="breadcrumb">
             <li><a href="<c:url value="/AudioWave?command=singer"/>"><fmt:message key="singer.all"/></a></li>
         </ul>
@@ -36,7 +36,7 @@
         </div>
         <div class="text-align-center">
             <c:choose>
-                <c:when test="${albumNotFound}">
+                <c:when test="${empty singer.albums}">
                     <div>
                         <p><fmt:message key="singer.albums.not.added"/></p>
                     </div>

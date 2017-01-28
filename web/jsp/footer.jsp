@@ -6,7 +6,7 @@
 <body>
 
 <div class=" text-align-center application_footer footer ">
-    &copy;Copyright
+    <span>&copy;Copyright</span>
     <a href="../AudioWave?command=change_language&lang=en_US"/>
     <img class="imgLang usa" src="../media/images/usa.png" alt="alt">
     </a>
@@ -41,22 +41,22 @@
     });
 </script>
 <script type="text/javascript">
-    <c:if test="${loginErr == 'true'}">
+    <c:if test="${loginErr eq 'true'}">
     $("#myModal").modal('show');
     document.getElementById("login-err").innerHTML = '<fmt:message key="header.login.error"/>';
     <c:set var="loginErr" value="false" scope="session"/>
     </c:if>
-    <c:if test="${regErr == 'login'}">
+    <c:if test="${regErr eq 'login'}">
     $("#myModall").modal('show');
     document.getElementById("reg-err").innerHTML = '<fmt:message key="header.reg.login.error"/>';
     <c:set var="regErr" value="false" scope="session"/>
     </c:if>
-    <c:if test="${regErr == 'true'}">
+    <c:if test="${regErr eq 'true'}">
     $("#myModall").modal('show');
     document.getElementById("reg-err").innerHTML = '<fmt:message key="header.reg.error"/>';
     <c:set var="regErr" value="false" scope="session"/>
     </c:if>
-    <c:if test="${regErr == 'success'}">
+    <c:if test="${regErr eq 'success'}">
     $("#myModall").modal('show');
     document.getElementById("reg-err").innerHTML = '<fmt:message key="header.reg.success"/>';
     <c:set var="regErr" value="false" scope="session"/>
