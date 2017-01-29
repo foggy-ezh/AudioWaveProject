@@ -59,6 +59,7 @@
                                                     <button type="submit" class="btn-buy" id="unblock-btn"><fmt:message
                                                             key="button.unblock"/></button>
                                                     <input type="hidden" name="command" value="unblock_audio"/>
+                                                    <input type="hidden" name="id" value="${item.id}"/>
                                                 </form>
                                             </div>
                                         </c:when>
@@ -68,6 +69,7 @@
                                                     <button type="submit" class="btn-buy" id="block-btn"><fmt:message
                                                             key="button.block"/></button>
                                                     <input type="hidden" name="command" value="block_audio"/>
+                                                    <input type="hidden" name="id" value="${item.id}"/>
                                                 </form>
                                             </div>
                                         </c:otherwise>
@@ -77,6 +79,7 @@
                                             <button type="submit" class="btn-buy" id="change-btn"><fmt:message
                                                     key="button.change"/></button>
                                             <input type="hidden" name="command" value="change_audio"/>
+                                            <input type="hidden" name="id" value="${item.id}"/>
                                         </form>
                                     </div>
                                     <div class="inline-block audio-info cost">
@@ -152,7 +155,7 @@
                                     <input type="hidden" name="command" value="delete_comment"/>
                                     <input type="hidden" name="userId" value="${curcomment.userId}"/>
                                     <input type="hidden" name="albumId" value="${album.id}"/>
-                                    <input type="hidden" name="comment" value="${curcomment.id}"/>
+                                    <input type="hidden" name="commentId" value="${curcomment.id}"/>
                                 </form>
                             </c:if>
                         </div>
@@ -173,11 +176,13 @@
                     <c:otherwise>
                         <form>
                             <h4><fmt:message key="album.comment.your"/></h4>
-                            <textarea name="Text1" title="Comment"></textarea><br>
-                            <button type="submit" class="btn" id="login-btn">
+                            <textarea name="text" title="Comment" required></textarea><br>
+                            <button type="submit" class="btn" id="btn">
                                 <fmt:message key="album.comment.add"/>
                             </button>
                             <input type="hidden" name="command" value="add_comment"/>
+                            <input type="hidden" name="albumId" value="${album.id}"/>
+                            <input type="hidden" name="userId" value="${currentUser.id}"/>
                         </form>
                     </c:otherwise>
                 </c:choose>

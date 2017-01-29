@@ -23,6 +23,8 @@ public class AudiotrackDAO extends AbstractDAO<Audiotrack> {
             " ON audio1.audio_track_id = audio3.audio_track_id WHERE audio1.audio_track_blocked = 0) as t1 ORDER BY COUNT DESC limit 9;";
     private static final String SQL_SELECT_BY_ALBUM_ID_ADMIN = "SELECT * FROM audio_track WHERE audio_track.album_id = ?;";
     private static final String SQL_SELECT_BY_ALBUM_ID = "SELECT * FROM audio_track WHERE audio_track_blocked = 0 AND audio_track.album_id = ?;";
+    private static final String SQL_UPDATE_SET_UNBLOCKED = "UPDATE mydb.audio_track SET audio_track_blocked=0 WHERE audio_track_id=?;";
+    private static final String SQL_UPDATE_SET_BLOCKED = "UPDATE mydb.audio_track SET audio_track_blocked=1 WHERE audio_track_id=?;";
 
     public AudiotrackDAO(ProxyConnection connection) {
         super(connection);
@@ -82,5 +84,11 @@ public class AudiotrackDAO extends AbstractDAO<Audiotrack> {
 
     public List<Audiotrack> findAllAudiotrackByAlbumId(long albumId) throws DAOException {
         return findEntityByParameter(SQL_SELECT_BY_ALBUM_ID_ADMIN, String.valueOf(albumId), false);
+    }
+    public void updateAudiotrackToUnblocked(long albumId) throws DAOException {
+        changeBlockedStatus(SQL_UPDATE_SET_UNBLOCKED, albumId);
+    }
+    public void updateAudiotrackToBlocked(long albumId) throws DAOException {
+        changeBlockedStatus(SQL_UPDATE_SET_BLOCKED, albumId);
     }
 }

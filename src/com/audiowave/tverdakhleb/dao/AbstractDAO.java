@@ -108,4 +108,17 @@ public abstract class AbstractDAO <T extends Entity> {
             this.close(stmt);
         }
     }
+
+    void changeBlockedStatus(String sql, long id) throws DAOException {
+        PreparedStatement stmt = null;
+        try {
+            stmt = connection.prepareStatement(sql);
+            stmt.setLong(1, id);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new DAOException(e);
+        } finally {
+            this.close(stmt);
+        }
+    }
 }

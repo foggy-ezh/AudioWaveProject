@@ -38,6 +38,7 @@ public class AlbumDAO extends AbstractDAO<Album> {
             "album_release_year, album_blocked ,SUBSTRING(album_name, 1, 1) AS letter FROM album ORDER BY album_name) as album1 \n" +
             "WHERE album1.letter LIKE ? AND album1.album_blocked = 0 LIMIT ?, ?;";
 
+
     public AlbumDAO(ProxyConnection connection) {
         super(connection);
     }

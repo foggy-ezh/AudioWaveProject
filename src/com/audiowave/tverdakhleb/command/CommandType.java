@@ -39,6 +39,22 @@ public enum CommandType {
     CURRENT_ALBUM {
         @Override
         public ICommandAction getCommand() {return new CommandCurrentAlbum();}
+    },
+    UNBLOCK_AUDIO {
+        @Override
+        public ICommandAction getCommand() {return new CommandUnblockAudio();}
+    },
+    BLOCK_AUDIO {
+        @Override
+        public ICommandAction getCommand() {return new CommandBlockAudio();}
+    },
+    ADD_COMMENT{
+        @Override
+        public ICommandAction getCommand() {return new CommandAddComment();}
+    },
+    DELETE_COMMENT{
+        @Override
+        public ICommandAction getCommand() {return new CommandDeleteComment();}
     };
 
     private static final Logger LOGGER = LogManager.getLogger();
