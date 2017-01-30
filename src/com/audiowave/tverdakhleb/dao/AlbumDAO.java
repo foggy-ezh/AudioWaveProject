@@ -37,6 +37,9 @@ public class AlbumDAO extends AbstractDAO<Album> {
     private static final String SQL_SELECT_BY_SYMBOL_NOT_BLOCKED ="SELECT SQL_CALC_FOUND_ROWS * FROM(SELECT album_id, album_name, album_cover, " +
             "album_release_year, album_blocked ,SUBSTRING(album_name, 1, 1) AS letter FROM album ORDER BY album_name) as album1 \n" +
             "WHERE album1.letter LIKE ? AND album1.album_blocked = 0 LIMIT ?, ?;";
+    private static final String SQL_UPDATE_SET_UNBLOCKED = "UPDATE album SET album_blocked=0 WHERE album_id= ?;";
+    private static final String SQL_UPDATE_SET_BLOCKED ="UPDATE audio_track as a1, album as a2\n" +
+            "SET a2.album_blocked=1, a1.audio_track_blocked = 1 WHERE a2.album_id= ? AND a2.album_id=a1.album_id;";
 
 
     public AlbumDAO(ProxyConnection connection) {
@@ -45,13 +48,7 @@ public class AlbumDAO extends AbstractDAO<Album> {
 
 
     @Override
-    public boolean remove(long id) throws DAOException {
-        return false;
-    }
-
-    @Override
-    public boolean remove(Album entity) throws DAOException {
-        return false;
+    public void remove(Album entity) throws DAOException {
     }
 
     @Override
@@ -59,8 +56,7 @@ public class AlbumDAO extends AbstractDAO<Album> {
     }
 
     @Override
-    public Album update(Album entity) throws DAOException {
-        return null;
+    public void update(Album entity) throws DAOException {
     }
 
     @Override
@@ -113,6 +109,12 @@ public class AlbumDAO extends AbstractDAO<Album> {
     }
     public int findAllAlbumBySymbol(List<Album> list, String symbol, int start, int count) throws DAOException {
         return findEntityBySymbol(SQL_SELECT_BY_SYMBOL, list, symbol, start, count);
+    }
+    public void updateAlbumToUnblocked(long albumId) throws DAOException {
+        changeBlockedStatus(SQL_UPDATE_SET_UNBLOCKED, albumId);
+    }
+    public void updateAlbumToBlocked(long albumId) throws DAOException {
+        changeBlockedStatus(SQL_UPDATE_SET_BLOCKED, albumId);
     }
 
 }

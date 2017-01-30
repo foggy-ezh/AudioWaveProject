@@ -54,9 +54,6 @@ public class AudioWaveController extends HttpServlet {
         System.out.println(request.getRequestURI()+'?'+request.getQueryString());
         ICommandAction command = CommandType.defineCommand(request);
         String page =  command.execute(request);
-        System.out.println(page);
-        System.out.println(request.getSession().getAttribute(PROCESS));
-        System.out.println(REDIRECT.equals(request.getSession().getAttribute(PROCESS)));
         if(REDIRECT.equals(request.getSession().getAttribute(PROCESS))){
             response.sendRedirect(page);
         } else {

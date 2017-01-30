@@ -12,6 +12,11 @@ public class Album extends Entity {
     private List<Audiotrack> audiotracks;
     private List<AlbumComment> albumComments;
 
+    public Album(long id, String albumName, int releaseYear) {
+        super(id);
+        this.albumName = albumName;
+        this.releaseYear = releaseYear;
+    }
 
     public Album(long id, String albumName, int releaseYear, String coverURI, Boolean blocked) {
         super(id);

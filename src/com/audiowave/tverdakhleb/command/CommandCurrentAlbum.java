@@ -38,7 +38,9 @@ public class CommandCurrentAlbum implements ICommandAction {
                 AlbumService service = new AlbumService();
                 Album album = service.getAlbumById(albumId, String.valueOf(request.getSession().getAttribute(ROLE)));
                 request.setAttribute(PARAM_ALBUM, album);
+                if(album != null){
                 request.setAttribute(PARAM_SYMBOL, album.getAlbumName().toUpperCase().charAt(0));
+                }
             } catch (ServiceException e) {
                 LOGGER.log(Level.ERROR, e);
             }

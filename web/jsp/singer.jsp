@@ -24,11 +24,53 @@
             <li class="active"><fmt:message key="singer.all"/></li>
         </c:when>
         <c:otherwise>
-            <li><a href="/AudioWave?command=singer"><fmt:message key="singer.all"/></a></li>
+            <li><a href="<c:url value="/AudioWave?command=singer"/>"><fmt:message key="singer.all"/></a></li>
             <li class="active">${symbol}</li>
         </c:otherwise>
     </c:choose>
 </ul>
+<c:if test="${role eq 'admin'}">
+    <div class="btn-add">
+        <button type="button" class="btn-add" data-toggle="modal" data-target="#AddSingerModal">
+            <fmt:message key="button.add"/>
+        </button>
+    </div>
+    <div class="modal fade" id="AddSingerModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"
+                            aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel"><fmt:message key="add.singer"/></h4>
+                </div>
+                <div class="modal-body">
+                    <form name="add_singer" method="post" action="AudioWave">
+                        <span><fmt:message key="header.name"/></span><br>
+                        <c:choose>
+                            <c:when test="${not empty changeSinger}">
+                                <input type="text" name="singerName" required value="${changeSinger.name}"><br>
+                                <input type="hidden" name="singerId" value="${changeSinger.id}"/>
+                                <button type="submit" class="btn" id="login-btn"><fmt:message
+                                        key="button.change"/></button>
+                            </c:when>
+                            <c:otherwise>
+                                <input type="text" name="singerName" required><br>
+                                <button type="submit" class="btn" id="login-btn"><fmt:message
+                                        key="button.add"/></button>
+                            </c:otherwise>
+                        </c:choose>
+                        <input type="hidden" name="command" value="add_singer"/>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal"><fmt:message
+                            key="header.login.close"/></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</c:if>
 <hr>
 <div class="text-align-center">
     <c:choose>
@@ -44,6 +86,15 @@
                     <div>
                         <p><a href="<c:url value="/AudioWave?command=current_singer&id=${item.id}"/>">${item.name}</a>
                         </p>
+                        <c:if test="${role eq 'admin'}">
+                            <form name="change_singer" method="post" action="AudioWave">
+                                <input type="hidden" name="singerName" value="${item.name}">
+                                <input type="hidden" name="singerId" value="${item.id}"/>
+                                <button type="submit" class="btn inline-block"><fmt:message
+                                    key="button.change"/></button>
+                                <input type="hidden" name="command" value="change_singer"/>
+                            </form>
+                        </c:if>
                     </div>
                 </c:forEach>
             </div>

@@ -29,12 +29,10 @@
                         </c:forEach></ul>
                 </div>
                 <div class="ws_bullets">
-                    <div>
-                        <c:forEach var="albums" items="${album}" begin="0" end="4" varStatus="loop">
+                        <c:forEach var="album" items="${albums}" begin="0" end="4" varStatus="loop">
                             <a href="#" title="${album.albumName}"><span>${loop.current}</span></a>
                         </c:forEach>
                         <div class="ws_shadow"></div>
-                    </div>
                 </div>
             </div>
         </div>

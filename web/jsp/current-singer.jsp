@@ -30,6 +30,65 @@
         <div class="mainbox">
             <h1>${singer.name}</h1>
         </div>
+        <c:if test="${role eq 'admin'}">
+            <div class="btn-add">
+                <button type="button" class=" btn-add" data-toggle="modal" data-target="#AddAlbumModal">
+                    <fmt:message key="button.add"/>
+                </button>
+            </div>
+            <div class="modal fade" id="AddAlbumModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+                 aria-hidden="true">
+                <div class="modal-dialog modal-sm">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal"
+                                    aria-hidden="true">&times;</button>
+                            <h4 class="modal-title" id="myModalLabel"><fmt:message key="add.album"/></h4>
+                        </div>
+                        <div class="modal-body">
+                            <form name="add_singer" method="post" action="AudioWave" enctype="multipart/form-data">
+                                <c:choose>
+                                    <c:when test="${not empty changeAlbum}">
+                                        <span><fmt:message key="header.name"/></span><br>
+                                        <input type="text" name="albumName" required
+                                               value="${changeAlbum.albumName}"><br>
+                                        <span><fmt:message key="release.year"/></span><br>
+                                        <input type="text" name="releaseYear" required pattern="^[1-9][0-9]{3}$"
+                                               value="${changeAlbum.releaseYear}"><br>
+                                        <fmt:message key="album.cover"/><br>
+                                        <input type="file" name="cover" accept=".jpg"/><br>
+                                        <input type="hidden" name="albumId" value="${changeAlbum.id}"/>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <span><fmt:message key="header.name"/></span><br>
+                                        <input type="text" name="albumName" required><br>
+                                        <span><fmt:message key="release.year"/></span><br>
+                                        <input type="text" name="releaseYear" required pattern="^[1-9][0-9]{3}$"><br>
+                                        <fmt:message key="album.cover"/><br>
+                                        <input type="file" name="cover" accept=".jpg" required/><br>
+                                        <span><fmt:message key="album.add.info"/></span><br>
+                                        <span><fmt:message key="header.name"/></span><br>
+                                        <input type="text" name="audioName" required><br>
+                                        <fmt:message key="download.audio"/><br>
+                                        <input type="file" name="cover" accept=".mp3" required/><br>
+                                        <span><fmt:message key="add.cost"/></span><br>
+                                        <input type="text" name="audioCost" required pattern="^\d{1,3}\.\d{0,2}$"><br>
+                                        <input type="hidden" name="singerId" value="${singer.id}"/>
+                                    </c:otherwise>
+                                </c:choose>
+                                <button type="submit" class="btn" id="login-btn"><fmt:message
+                                        key="button.add"/></button>
+                                <input type="hidden" name="command" value="add_album"/>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal"><fmt:message
+                                    key="header.login.close"/></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </c:if>
         <hr>
         <div class="zag">
             <h2><fmt:message key="singer.albums"/></h2>
@@ -56,6 +115,18 @@
                             <div class="year">
                                 <p>${item.releaseYear}</p>
                             </div>
+                            <c:if test="${role eq 'admin'}">
+                                <div class="inline-block">
+                                    <form name="change_singer" method="post" action="AudioWave">
+                                        <input type="hidden" name="albumName" value="${item.albumName}">
+                                        <input type="hidden" name="albumId" value="${item.id}"/>
+                                        <input type="hidden" name="releaseYear" value="${item.releaseYear}"/>
+                                        <button type="submit" class="btn"><fmt:message
+                                                key="button.change"/></button>
+                                        <input type="hidden" name="command" value="change_album"/>
+                                    </form>
+                                </div>
+                            </c:if>
                         </div>
                     </c:forEach>
                 </c:otherwise>

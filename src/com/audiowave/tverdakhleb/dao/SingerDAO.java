@@ -41,29 +41,46 @@ public class SingerDAO extends AbstractDAO<Singer> {
             "FROM singer GROUP BY letter ORDER BY letter;";
     private static final String SQL_SELECT_BY_SYMBOL ="SELECT SQL_CALC_FOUND_ROWS * FROM(SELECT singer_id, singer_name,SUBSTRING(singer_name, 1, 1) AS letter " +
             " FROM singer ORDER BY singer_name) as singer1 WHERE singer1.letter LIKE ? LIMIT ? , ? ;";
+    private static final String SQL_INSERT_SINGER = "INSERT INTO singer (`singer_name`) VALUES (?);";
+    private static final String SQL_UPDATE_SINGER = "UPDATE singer SET `singer_name`= ? WHERE `singer_id`= ?;";
 
     public SingerDAO(ProxyConnection connection) {
         super(connection);
     }
 
-
     @Override
-    public boolean remove(long id) throws DAOException {
-        return false;
-    }
-
-    @Override
-    public boolean remove(Singer entity) throws DAOException {
-        return false;
+    public void remove(Singer entity) throws DAOException {
     }
 
     @Override
     public void create(Singer entity) throws DAOException {
+        PreparedStatement stmt = null;
+        try {
+            stmt = connection.prepareStatement(SQL_INSERT_SINGER);
+            stmt.setString(1, entity.getName());
+            stmt.executeUpdate();
+        }
+        catch (SQLException e) {
+            throw new DAOException(e);
+        } finally {
+            this.close(stmt);
+        }
     }
 
     @Override
-    public Singer update(Singer entity) throws DAOException {
-        return null;
+    public void update(Singer entity) throws DAOException {
+        PreparedStatement stmt = null;
+        try {
+            stmt = connection.prepareStatement(SQL_UPDATE_SINGER);
+            stmt.setString(1, entity.getName());
+            stmt.setLong(2, entity.getId());
+            stmt.executeUpdate();
+        }
+        catch (SQLException e) {
+            throw new DAOException(e);
+        } finally {
+            this.close(stmt);
+        }
     }
 
     @Override

@@ -26,14 +26,9 @@ public class UserDAO extends AbstractDAO<User> {
         super(connection);
     }
 
-    @Override
-    public boolean remove(long id) throws DAOException {
-        return false;
-    }
 
     @Override
-    public boolean remove(User entity) throws DAOException {
-        return false;
+    public void remove(User entity) throws DAOException {
     }
 
     @Override
@@ -73,8 +68,7 @@ public class UserDAO extends AbstractDAO<User> {
         }
     }
     @Override
-    public User update(User entity) throws DAOException {
-        return null;
+    public void update(User entity) throws DAOException {
     }
 
     @Override

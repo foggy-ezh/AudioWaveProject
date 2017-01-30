@@ -24,12 +24,7 @@ public class CommentDAO extends AbstractDAO<AlbumComment> {
     }
 
     @Override
-    public boolean remove(long id) throws DAOException {
-        return false;
-    }
-
-    @Override
-    public boolean remove(AlbumComment entity) throws DAOException {
+    public void remove(AlbumComment entity) throws DAOException {
         PreparedStatement stmt = null;
         try {
             stmt = connection.prepareStatement(SQL_DELETE_COMMENT);
@@ -37,7 +32,6 @@ public class CommentDAO extends AbstractDAO<AlbumComment> {
             stmt.setLong(2, entity.getUserId());
             stmt.setLong(3, entity.getAlbumId());
             stmt.executeUpdate();
-            return true;
         } catch (SQLException e) {
             throw new DAOException(e);
         } finally {
@@ -62,8 +56,7 @@ public class CommentDAO extends AbstractDAO<AlbumComment> {
     }
 
     @Override
-    public AlbumComment update(AlbumComment entity) throws DAOException {
-        return null;
+    public void update(AlbumComment entity) throws DAOException {
     }
 
     @Override

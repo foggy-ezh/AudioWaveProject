@@ -2,7 +2,8 @@ package com.audiowave.tverdakhleb.command;
 
 import com.audiowave.tverdakhleb.exception.ServiceException;
 import com.audiowave.tverdakhleb.manager.ConfigurationManager;
-import com.audiowave.tverdakhleb.service.HomePageService;
+import com.audiowave.tverdakhleb.service.AlbumService;
+import com.audiowave.tverdakhleb.service.AudiotrackService;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -19,10 +20,11 @@ public class EmptyCommand implements ICommandAction {
     @Override
     public String execute(HttpServletRequest request) throws IOException, ServletException {
         setPreviousPage(request);
-        HomePageService service = new HomePageService();
+        AlbumService albumService = new AlbumService();
+        AudiotrackService audiotrackService = new AudiotrackService();
         try {
-            request.setAttribute("albums", service.getPopularAlbum());
-            request.setAttribute("audiotracks", service.getPopularAudiotrack());
+            request.setAttribute("albums", albumService.getPopularAlbum());
+            request.setAttribute("audiotracks", audiotrackService.getPopularAudiotrack());
         } catch (ServiceException e) {
             LOGGER.log(Level.ERROR,e);
         }

@@ -66,6 +66,7 @@
                 </ul>
             </div>
         </nav>
+        <c:if test="${role eq 'guest'}">
         <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
              aria-hidden="true">
             <div class="modal-dialog modal-sm">
@@ -142,5 +143,6 @@
                 </div>
             </div>
         </div>
+        </c:if>
 </body>
 </html>

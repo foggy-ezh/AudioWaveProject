@@ -55,6 +55,26 @@ public enum CommandType {
     DELETE_COMMENT{
         @Override
         public ICommandAction getCommand() {return new CommandDeleteComment();}
+    },
+    UNBLOCK_ALBUM {
+        @Override
+        public ICommandAction getCommand() {return new CommandUnblockAlbum();}
+    },
+    BLOCK_ALBUM {
+        @Override
+        public ICommandAction getCommand() {return new CommandBlockAlbum();}
+    },
+    ADD_SINGER{
+        @Override
+        public ICommandAction getCommand() {return new CommandAddSinger();}
+    },
+    CHANGE_SINGER{
+        @Override
+        public ICommandAction getCommand() {return new CommandChangeSinger();}
+    },
+    CHANGE_ALBUM{
+        @Override
+        public ICommandAction getCommand() {return new CommandChangeAlbum();}
     };
 
     private static final Logger LOGGER = LogManager.getLogger();

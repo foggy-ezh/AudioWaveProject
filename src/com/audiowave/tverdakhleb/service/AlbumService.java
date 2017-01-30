@@ -38,6 +38,9 @@ public class AlbumService extends AbstractService {
             connection = pool.getConnection();
             AlbumDAO albumDAO = new AlbumDAO(connection);
             Album album = albumDAO.findAlbumById(id);
+            if(album.getBlocked() && !RoleType.ADMIN.getRole().equals(role)){
+                album = null;
+            }
             if(album != null){
                 AudiotrackDAO audiotrackDAO = new AudiotrackDAO(connection);
                 if(RoleType.ADMIN.getRole().equals(role)){
@@ -95,6 +98,53 @@ public class AlbumService extends AbstractService {
                 return getAlbums(symbol, totalPages,role);
             }
             return list;
+        } catch ( DAOException e) {
+            throw new ServiceException(e);
+        }finally {
+            restorePoolConnection(pool, connection);
+        }
+    }
+    public List<Album> getPopularAlbum() throws ServiceException {
+        ConnectionPool pool = ConnectionPool.getInstance();
+        ProxyConnection connection = null;
+        List<Album> list;
+        try {
+            connection = pool.getConnection();
+            AlbumDAO albumDAO = new AlbumDAO(connection);
+            list = albumDAO.findPopularAlbums();
+            SingerDAO singerDAO = new SingerDAO(connection);
+            for(Album album : list){
+                Singer singer = singerDAO.findSingerByAlbumId(album.getId());
+                album.setSinger(singer);
+            }
+        } catch ( DAOException e) {
+            throw new ServiceException(e);
+        }finally {
+            restorePoolConnection(pool, connection);
+        }
+        return list;
+    }
+
+    public void changeAlbumToUnblocked(long albumId) throws ServiceException {
+        ConnectionPool pool = ConnectionPool.getInstance();
+        ProxyConnection connection = null;
+        try {
+            connection = pool.getConnection();
+            AlbumDAO albumDAO = new AlbumDAO(connection);
+            albumDAO.updateAlbumToUnblocked(albumId);
+        } catch ( DAOException e) {
+            throw new ServiceException(e);
+        }finally {
+            restorePoolConnection(pool, connection);
+        }
+    }
+    public void changeAlbumToBlocked(long albumId) throws ServiceException {
+        ConnectionPool pool = ConnectionPool.getInstance();
+        ProxyConnection connection = null;
+        try {
+            connection = pool.getConnection();
+            AlbumDAO albumDAO = new AlbumDAO(connection);
+            albumDAO.updateAlbumToBlocked(albumId);
         } catch ( DAOException e) {
             throw new ServiceException(e);
         }finally {

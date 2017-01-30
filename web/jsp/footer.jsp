@@ -68,5 +68,15 @@
         document.getElementById("login-err").innerHTML='';
     })
 </script>
+<script type="text/javascript">
+    <c:if test="${not empty changeSinger}">
+    $("#AddSingerModal").modal('show');
+    <c:remove var="changeSinger"/>
+    </c:if>
+    <c:if test="${not empty changeAlbum}">
+    $("#AddAlbumModal").modal('show');
+    <c:remove var="changeAlbum"/>
+    </c:if>
+</script>
 </body>
 </html>

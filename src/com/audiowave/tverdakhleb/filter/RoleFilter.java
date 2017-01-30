@@ -11,7 +11,6 @@ import java.io.IOException;
 @WebFilter(
         urlPatterns = {"/*"},
         dispatcherTypes = {DispatcherType.REQUEST}
-
 )
 
 public class RoleFilter implements Filter {

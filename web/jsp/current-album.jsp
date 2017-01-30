@@ -26,6 +26,48 @@
             <li><a href="<c:url value="/AudioWave?command=album"/>"><fmt:message key="singer.albums"/></a></li>
             <li><a href="<c:url value="/AudioWave?command=album&symbol=${symbol}"/>">${symbol}</a></li>
             <li class="active">${album.albumName}</li>
+            <%--<c:if test="${role eq 'admin'}">
+                <div class="btn-add">
+                    <button type="button" class="btn-buy" data-toggle="modal" data-target="#AddAudioModal">
+                        <fmt:message key="button.add"/>
+                    </button>
+                </div>
+                <div class="modal fade" id="AddAudioModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+                     aria-hidden="true" style="font-size: 16px;">
+                    <div class="modal-dialog modal-sm">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal"
+                                        aria-hidden="true">&times;</button>
+                                <h4 class="modal-title" id="myModalLabel"><fmt:message key="header.auth"/></h4>
+                                <p><fmt:message key="header.login.input"/></p>
+                            </div>
+                            <div class="modal-body">
+                                <form name="log_in" method="post" action="AudioWave" enctype="multipart/form-data">
+                                    <span><fmt:message key="header.login.login"/></span><br>
+                                    <input type="text" name="login"><br>
+                                    <p></p>
+                                    <span><fmt:message key="header.login.password"/></span><br>
+                                    <input type="file" name="file" accept=".mp3" required/><br>
+                                    <button type="submit" class="btn" id="login-btn"><fmt:message
+                                            key="header.login"/></button>
+                                    <input type="hidden" name="command" value="log_in"/>
+                                </form>
+                                <p id="login-err"></p>
+                                <p><fmt:message key="header.login.not.reg"/>
+                                    <a href="#myModall" data-toggle="modal" class="fire-brick">
+                                        <fmt:message key="header.login.register"/>
+                                    </a>
+                                </p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal"><fmt:message
+                                        key="header.login.close"/></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </c:if>--%>
         </ul>
         <hr>
         <div>
@@ -37,6 +79,26 @@
                 </h2>
                 <h2><span class="not-bold"><fmt:message key="album.one"/> </span>${album.albumName}</h2>
                 <h3><fmt:message key="release.year"/> ${album.releaseYear}</h3>
+                <c:if test="${role eq 'admin'}">
+                    <c:choose>
+                        <c:when test="${album.blocked}">
+                            <form method="post" action="AudioWave">
+                                <button type="submit" class="btn-buy"><fmt:message
+                                        key="button.unblock"/></button>
+                                <input type="hidden" name="command" value="unblock_album"/>
+                                <input type="hidden" name="albumId" value="${album.id}"/>
+                            </form>
+                        </c:when>
+                        <c:otherwise>
+                            <form onsubmit='return albumBlockInfo()' method="post" action="AudioWave">
+                                <button type="submit" class="btn-buy"><fmt:message
+                                        key="button.block"/></button>
+                                <input type="hidden" name="command" value="block_album"/>
+                                <input type="hidden" name="albumId" value="${album.id}"/>
+                            </form>
+                        </c:otherwise>
+                    </c:choose>
+                </c:if>
             </div>
         </div>
         <hr>
@@ -55,7 +117,7 @@
                                     <c:choose>
                                         <c:when test="${item.blocked}">
                                             <div class="inline-block">
-                                                <form>
+                                                <form method="post" action="AudioWave">
                                                     <button type="submit" class="btn-buy" id="unblock-btn"><fmt:message
                                                             key="button.unblock"/></button>
                                                     <input type="hidden" name="command" value="unblock_audio"/>
@@ -65,7 +127,7 @@
                                         </c:when>
                                         <c:otherwise>
                                             <div class="inline-block">
-                                                <form>
+                                                <form method="post" action="AudioWave">
                                                     <button type="submit" class="btn-buy" id="block-btn"><fmt:message
                                                             key="button.block"/></button>
                                                     <input type="hidden" name="command" value="block_audio"/>
@@ -75,7 +137,7 @@
                                         </c:otherwise>
                                     </c:choose>
                                     <div class="inline-block">
-                                        <form>
+                                        <form method="post" action="AudioWave">
                                             <button type="submit" class="btn-buy" id="change-btn"><fmt:message
                                                     key="button.change"/></button>
                                             <input type="hidden" name="command" value="change_audio"/>
@@ -104,7 +166,7 @@
                                 <c:otherwise>
                                     <c:if test="${!item.blocked}">
                                         <div class="inline-block">
-                                            <form>
+                                            <form method="post" action="AudioWave">
                                                 <button type="submit" class="btn-buy" id="buy-btn"><fmt:message
                                                         key="button.buy"/></button>
                                                 <input type="hidden" name="command" value="buy"/>
@@ -149,7 +211,7 @@
                                     ${curcomment.comment}
                             </p>
                             <c:if test="${(curcomment.userId eq currentUser.id) or(role eq 'admin')}">
-                                <form>
+                                <form method="post" action="AudioWave">
                                     <button type="submit" class="btn-buy"><fmt:message
                                             key="btn.delete"/></button>
                                     <input type="hidden" name="command" value="delete_comment"/>
@@ -174,11 +236,11 @@
                         <h4><fmt:message key="album.login.to.comment."/></h4>
                     </c:when>
                     <c:otherwise>
-                        <form>
+                        <form method="post" action="AudioWave">
                             <h4><fmt:message key="album.comment.your"/></h4>
                             <textarea name="text" title="Comment" required></textarea><br>
                             <button type="submit" class="btn" id="btn">
-                                <fmt:message key="album.comment.add"/>
+                                <fmt:message key="button.add"/>
                             </button>
                             <input type="hidden" name="command" value="add_comment"/>
                             <input type="hidden" name="albumId" value="${album.id}"/>

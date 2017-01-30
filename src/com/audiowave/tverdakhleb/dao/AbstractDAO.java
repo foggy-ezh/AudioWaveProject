@@ -20,10 +20,9 @@ public abstract class AbstractDAO <T extends Entity> {
 
     private static final String SQL_SELECT_ROWS ="SELECT FOUND_ROWS();";
 
-    public abstract boolean remove(long id) throws DAOException;
-    public abstract boolean remove(T entity) throws DAOException;
+    public abstract void remove(T entity) throws DAOException;
     public abstract void create(T entity) throws DAOException;
-    public abstract T update(T entity) throws DAOException;
+    public abstract void update(T entity) throws DAOException;
     abstract void parseResultSet(ResultSet resultSet, List<T> list) throws DAOException;
     abstract void parseFullResultSet(ResultSet resultSet, List<T> list) throws DAOException;
 
