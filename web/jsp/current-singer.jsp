@@ -46,7 +46,7 @@
                             <h4 class="modal-title" id="myModalLabel"><fmt:message key="add.album"/></h4>
                         </div>
                         <div class="modal-body">
-                            <form name="add_singer" method="post" action="AudioWave" enctype="multipart/form-data">
+                            <form name="add_album" method="post" action="AudioWave" enctype="multipart/form-data">
                                 <c:choose>
                                     <c:when test="${not empty changeAlbum}">
                                         <span><fmt:message key="header.name"/></span><br>
@@ -58,8 +58,12 @@
                                         <fmt:message key="album.cover"/><br>
                                         <input type="file" name="cover" accept=".jpg"/><br>
                                         <input type="hidden" name="albumId" value="${changeAlbum.id}"/>
+                                        <input type="hidden" name="command" value="add_album"/>
+                                        <button type="submit" class="btn" id="login-btn"><fmt:message
+                                                key="button.change"/></button>
                                     </c:when>
                                     <c:otherwise>
+                                        <input type="hidden" name="command" value="add_album"/>
                                         <span><fmt:message key="header.name"/></span><br>
                                         <input type="text" name="albumName" required><br>
                                         <span><fmt:message key="release.year"/></span><br>
@@ -74,11 +78,10 @@
                                         <span><fmt:message key="add.cost"/></span><br>
                                         <input type="text" name="audioCost" required pattern="^\d{1,3}\.\d{0,2}$"><br>
                                         <input type="hidden" name="singerId" value="${singer.id}"/>
+                                        <button type="submit" class="btn" id="login-btn"><fmt:message
+                                                key="button.add"/></button>
                                     </c:otherwise>
                                 </c:choose>
-                                <button type="submit" class="btn" id="login-btn"><fmt:message
-                                        key="button.add"/></button>
-                                <input type="hidden" name="command" value="add_album"/>
                             </form>
                         </div>
                         <div class="modal-footer">

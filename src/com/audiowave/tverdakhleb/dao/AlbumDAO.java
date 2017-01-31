@@ -4,6 +4,7 @@ import com.audiowave.tverdakhleb.dbconnection.ProxyConnection;
 import com.audiowave.tverdakhleb.entity.Album;
 import com.audiowave.tverdakhleb.exception.DAOException;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -40,6 +41,8 @@ public class AlbumDAO extends AbstractDAO<Album> {
     private static final String SQL_UPDATE_SET_UNBLOCKED = "UPDATE album SET album_blocked=0 WHERE album_id= ?;";
     private static final String SQL_UPDATE_SET_BLOCKED ="UPDATE audio_track as a1, album as a2\n" +
             "SET a2.album_blocked=1, a1.audio_track_blocked = 1 WHERE a2.album_id= ? AND a2.album_id=a1.album_id;";
+    private static final String SQL_UPDATE_ALBUM = "UPDATE album SET `album_name`= ? , `album_release_year`= ?  WHERE `album_id`= ?;";
+    private static final String SQL_UPDATE_ALBUM_COVER = "UPDATE album SET `album_cover`= ? WHERE `album_id`= ?;\n";
 
 
     public AlbumDAO(ProxyConnection connection) {
@@ -57,6 +60,19 @@ public class AlbumDAO extends AbstractDAO<Album> {
 
     @Override
     public void update(Album entity) throws DAOException {
+        PreparedStatement stmt = null;
+        try {
+            stmt = connection.prepareStatement(SQL_UPDATE_ALBUM);
+            stmt.setString(1, entity.getAlbumName());
+            stmt.setInt(2, entity.getReleaseYear());
+            stmt.setLong(3, entity.getId());
+            stmt.executeUpdate();
+        }
+        catch (SQLException e) {
+            throw new DAOException(e);
+        } finally {
+            this.close(stmt);
+        }
     }
 
     @Override
@@ -117,4 +133,18 @@ public class AlbumDAO extends AbstractDAO<Album> {
         changeBlockedStatus(SQL_UPDATE_SET_BLOCKED, albumId);
     }
 
+    public void updateCover(Album entity) throws DAOException {
+        PreparedStatement stmt = null;
+        try {
+            stmt = connection.prepareStatement(SQL_UPDATE_ALBUM_COVER);
+            stmt.setString(1, entity.getCoverURI());
+            stmt.setLong(2, entity.getId());
+            stmt.executeUpdate();
+        }
+        catch (SQLException e) {
+            throw new DAOException(e);
+        } finally {
+            this.close(stmt);
+        }
+    }
 }

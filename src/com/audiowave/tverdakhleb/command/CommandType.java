@@ -75,6 +75,10 @@ public enum CommandType {
     CHANGE_ALBUM{
         @Override
         public ICommandAction getCommand() {return new CommandChangeAlbum();}
+    },
+    ADD_ALBUM{
+        @Override
+        public ICommandAction getCommand() {return new CommandAddAlbum();}
     };
 
     private static final Logger LOGGER = LogManager.getLogger();
@@ -84,6 +88,7 @@ public enum CommandType {
 
     public static ICommandAction defineCommand(HttpServletRequest request){
         String action = request.getParameter(COMMAND);
+        System.out.println("Action "+action);
         ICommandAction command = new EmptyCommand();
         if(action == null || action.isEmpty() || action.equals("null")){
             return command;

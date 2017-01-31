@@ -11,8 +11,13 @@ import com.audiowave.tverdakhleb.entity.Audiotrack;
 import com.audiowave.tverdakhleb.entity.RoleType;
 import com.audiowave.tverdakhleb.entity.Singer;
 import com.audiowave.tverdakhleb.exception.DAOException;
+import com.audiowave.tverdakhleb.exception.FailedManagerWorkException;
 import com.audiowave.tverdakhleb.exception.ServiceException;
+import com.audiowave.tverdakhleb.manager.FileSaveManager;
+import org.jsoup.Jsoup;
+import org.jsoup.safety.Whitelist;
 
+import javax.servlet.http.Part;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,12 +30,13 @@ public class AlbumService extends AbstractService {
             connection = pool.getConnection();
             AlbumDAO albumDAO = new AlbumDAO(connection);
             return albumDAO.findAlbumBySingerId(singerId);
-        } catch ( DAOException e) {
+        } catch (DAOException e) {
             throw new ServiceException(e);
-        }finally {
+        } finally {
             restorePoolConnection(pool, connection);
         }
     }
+
     public Album getAlbumById(long id, String role) throws ServiceException {
         ConnectionPool pool = ConnectionPool.getInstance();
         ProxyConnection connection = null;
@@ -38,45 +44,46 @@ public class AlbumService extends AbstractService {
             connection = pool.getConnection();
             AlbumDAO albumDAO = new AlbumDAO(connection);
             Album album = albumDAO.findAlbumById(id);
-            if(album.getBlocked() && !RoleType.ADMIN.getRole().equals(role)){
+            if (album.getBlocked() && !RoleType.ADMIN.getRole().equals(role)) {
                 album = null;
             }
-            if(album != null){
+            if (album != null) {
                 AudiotrackDAO audiotrackDAO = new AudiotrackDAO(connection);
-                if(RoleType.ADMIN.getRole().equals(role)){
+                if (RoleType.ADMIN.getRole().equals(role)) {
                     album.setAudiotracks(audiotrackDAO.findAllAudiotrackByAlbumId(album.getId()));
-                }else {
+                } else {
                     album.setAudiotracks(audiotrackDAO.findNonBlockedAudiotrackByAlbumId(album.getId()));
                 }
                 SingerDAO singerDAO = new SingerDAO(connection);
                 for (Audiotrack audiotrack : album.getAudiotracks()) {
-                 audiotrack.setFeaturedSinger(singerDAO.findFeaturedSingerByAudiotrackId(audiotrack.getId()));
+                    audiotrack.setFeaturedSinger(singerDAO.findFeaturedSingerByAudiotrackId(audiotrack.getId()));
                 }
                 album.setSinger(singerDAO.findSingerByAlbumId(album.getId()));
                 CommentDAO commentDAO = new CommentDAO(connection);
                 album.setAlbumComments(commentDAO.findCommentsByAlbumId(album.getId()));
             }
             return album;
-        } catch ( DAOException e) {
+        } catch (DAOException e) {
             throw new ServiceException(e);
-        }finally {
+        } finally {
             restorePoolConnection(pool, connection);
         }
     }
+
     public List<String> getSingerStartLetter(String role) throws ServiceException {
         ConnectionPool pool = ConnectionPool.getInstance();
         ProxyConnection connection = null;
         try {
             connection = pool.getConnection();
             AlbumDAO albumDAO = new AlbumDAO(connection);
-            if(RoleType.ADMIN.getRole().equals(role)){
+            if (RoleType.ADMIN.getRole().equals(role)) {
                 return albumDAO.findAllAlbumFirstLetter();
-            }else {
+            } else {
                 return albumDAO.findNonBlockedAlbumFirstLetter();
             }
-        } catch ( DAOException e) {
+        } catch (DAOException e) {
             throw new ServiceException(e);
-        }finally {
+        } finally {
             restorePoolConnection(pool, connection);
         }
     }
@@ -87,23 +94,24 @@ public class AlbumService extends AbstractService {
         try {
             connection = pool.getConnection();
             AlbumDAO albumDAO = new AlbumDAO(connection);
-            int start = (currentPage-1)*RECORDS_PER_PAGE;
+            int start = (currentPage - 1) * RECORDS_PER_PAGE;
             List<Album> list = new ArrayList<>();
-            if(RoleType.ADMIN.getRole().equals(role)){
-                totalPages = (int) Math.ceil(albumDAO.findAllAlbumBySymbol( list, symbol, start, RECORDS_PER_PAGE)* 1.0/RECORDS_PER_PAGE);
-            }else {
-                totalPages = (int) Math.ceil(albumDAO.findNonBlockedAlbumBySymbol( list, symbol, start, RECORDS_PER_PAGE)* 1.0/RECORDS_PER_PAGE);
+            if (RoleType.ADMIN.getRole().equals(role)) {
+                totalPages = (int) Math.ceil(albumDAO.findAllAlbumBySymbol(list, symbol, start, RECORDS_PER_PAGE) * 1.0 / RECORDS_PER_PAGE);
+            } else {
+                totalPages = (int) Math.ceil(albumDAO.findNonBlockedAlbumBySymbol(list, symbol, start, RECORDS_PER_PAGE) * 1.0 / RECORDS_PER_PAGE);
             }
-            if(totalPages !=0 && totalPages < currentPage){
-                return getAlbums(symbol, totalPages,role);
+            if (totalPages != 0 && totalPages < currentPage) {
+                return getAlbums(symbol, totalPages, role);
             }
             return list;
-        } catch ( DAOException e) {
+        } catch (DAOException e) {
             throw new ServiceException(e);
-        }finally {
+        } finally {
             restorePoolConnection(pool, connection);
         }
     }
+
     public List<Album> getPopularAlbum() throws ServiceException {
         ConnectionPool pool = ConnectionPool.getInstance();
         ProxyConnection connection = null;
@@ -113,13 +121,13 @@ public class AlbumService extends AbstractService {
             AlbumDAO albumDAO = new AlbumDAO(connection);
             list = albumDAO.findPopularAlbums();
             SingerDAO singerDAO = new SingerDAO(connection);
-            for(Album album : list){
+            for (Album album : list) {
                 Singer singer = singerDAO.findSingerByAlbumId(album.getId());
                 album.setSinger(singer);
             }
-        } catch ( DAOException e) {
+        } catch (DAOException e) {
             throw new ServiceException(e);
-        }finally {
+        } finally {
             restorePoolConnection(pool, connection);
         }
         return list;
@@ -132,12 +140,13 @@ public class AlbumService extends AbstractService {
             connection = pool.getConnection();
             AlbumDAO albumDAO = new AlbumDAO(connection);
             albumDAO.updateAlbumToUnblocked(albumId);
-        } catch ( DAOException e) {
+        } catch (DAOException e) {
             throw new ServiceException(e);
-        }finally {
+        } finally {
             restorePoolConnection(pool, connection);
         }
     }
+
     public void changeAlbumToBlocked(long albumId) throws ServiceException {
         ConnectionPool pool = ConnectionPool.getInstance();
         ProxyConnection connection = null;
@@ -145,10 +154,36 @@ public class AlbumService extends AbstractService {
             connection = pool.getConnection();
             AlbumDAO albumDAO = new AlbumDAO(connection);
             albumDAO.updateAlbumToBlocked(albumId);
-        } catch ( DAOException e) {
+        } catch (DAOException e) {
             throw new ServiceException(e);
-        }finally {
+        } finally {
             restorePoolConnection(pool, connection);
+        }
+    }
+
+    public void updateAlbum(long albumId, String albumName, int releaseYear, Part partCover) throws ServiceException {
+        albumName = Jsoup.clean(albumName, Whitelist.basic());
+        if (!albumName.isEmpty()) {
+            ConnectionPool pool = ConnectionPool.getInstance();
+            ProxyConnection connection = null;
+            try {
+                connection = pool.getConnection();
+                AlbumDAO albumDAO = new AlbumDAO(connection);
+                Album album;
+                if (partCover.getSize() != 0) {
+                    FileSaveManager saveManager = new FileSaveManager();
+                    String coverURI = saveManager.saveAlbumCover(partCover, albumId, albumName);
+                    album = new Album(albumId, albumName, releaseYear, coverURI, false);
+                    albumDAO.updateCover(album);
+                } else {
+                    album = new Album(albumId, albumName, releaseYear);
+                }
+                albumDAO.update(album);
+            } catch (DAOException | FailedManagerWorkException e) {
+                throw new ServiceException(e);
+            } finally {
+                restorePoolConnection(pool, connection);
+            }
         }
     }
 }
