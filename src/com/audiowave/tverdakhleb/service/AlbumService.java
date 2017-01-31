@@ -23,13 +23,17 @@ import java.util.List;
 
 public class AlbumService extends AbstractService {
 
-    public List<Album> getSingerAlbums(long singerId) throws ServiceException {
+    public List<Album> getSingerAlbums(long singerId, String role) throws ServiceException {
         ConnectionPool pool = ConnectionPool.getInstance();
         ProxyConnection connection = null;
         try {
             connection = pool.getConnection();
             AlbumDAO albumDAO = new AlbumDAO(connection);
-            return albumDAO.findAlbumBySingerId(singerId);
+            if (RoleType.ADMIN.getRole().equals(role)) {
+                return albumDAO.findAlbumBySingerId(singerId);
+            } else {
+                return albumDAO.findNonBlockedAlbumBySingerId(singerId);
+            }
         } catch (DAOException e) {
             throw new ServiceException(e);
         } finally {
@@ -172,7 +176,7 @@ public class AlbumService extends AbstractService {
                 Album album;
                 if (partCover.getSize() != 0) {
                     FileSaveManager saveManager = new FileSaveManager();
-                    String coverURI = saveManager.saveAlbumCover(partCover, albumId, albumName);
+                    String coverURI = saveManager.saveUploadedFile(partCover, releaseYear, albumName);
                     album = new Album(albumId, albumName, releaseYear, coverURI, false);
                     albumDAO.updateCover(album);
                 } else {
@@ -185,5 +189,28 @@ public class AlbumService extends AbstractService {
                 restorePoolConnection(pool, connection);
             }
         }
+    }
+
+    public long insertNewAlbum(String albumName, int releaseYear, Part partCover) throws ServiceException {
+        albumName = Jsoup.clean(albumName, Whitelist.basic());
+        if (!albumName.isEmpty()) {
+            ConnectionPool pool = ConnectionPool.getInstance();
+            ProxyConnection connection = null;
+            try {
+                connection = pool.getConnection();
+                AlbumDAO albumDAO = new AlbumDAO(connection);
+                Album album;
+                FileSaveManager saveManager = new FileSaveManager();
+                String coverURI = saveManager.saveUploadedFile(partCover, releaseYear, albumName);
+                album = new Album(0, albumName, releaseYear, coverURI, false);
+                albumDAO.create(album);
+                return album.getId();
+            } catch (DAOException | FailedManagerWorkException e) {
+                throw new ServiceException(e);
+            } finally {
+                restorePoolConnection(pool, connection);
+            }
+        }
+        return 0;
     }
 }

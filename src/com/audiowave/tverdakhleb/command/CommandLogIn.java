@@ -26,10 +26,11 @@ public class CommandLogIn implements ICommandAction{
         boolean proceed = true;
         HttpSession session = request.getSession();
         String login = request.getParameter(PARAM_LOGIN);
+
         if(RoleType.GUEST.getRole().equals(session.getAttribute(ROLE))) {
             try {
                 LogInCheckService service = new LogInCheckService();
-                if (login == null || !service.checkLogin(login) || !service.checkPassword(login, request.getParameter(PARAM_PASSWORD))) {
+                if (login == null || login.isEmpty()|| !service.checkLogin(login) || !service.checkPassword(login, request.getParameter(PARAM_PASSWORD))) {
                     session.setAttribute(PARAM_LOGIN_ERR, true);
                     proceed = false;
                 }

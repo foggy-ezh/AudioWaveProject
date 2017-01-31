@@ -25,6 +25,9 @@ public class AlbumDAO extends AbstractDAO<Album> {
             "INNER JOIN (SELECT COUNT(user_id) AS COUNT, audio_track_id FROM user_has_audio_track GROUP BY audio_track_id ) AS audio3 " +
             "ON audio1.audio_track_id = audio3.audio_track_id WHERE audio1.audio_track_blocked = 0) as t1 GROUP BY album_id) as t2" +
             " ON album1.album_id = t2.album_id WHERE album1.album_blocked = 0 ORDER BY COUNT DESC LIMIT 4;\n";
+    private static final String SQL_SELECT_NON_BLOCKED_BY_SINGER_ID = "SELECT t1.* FROM album AS t1 INNER JOIN audio_track AS t2 ON t1.album_id=t2.album_id" +
+            " INNER JOIN singer_has_audio_track AS t3 ON t2.audio_track_id=t3.audio_track_id INNER JOIN singer AS t4 ON t3.singer_id=t4.singer_id" +
+            "  WHERE t3.featured_musician != 1 AND t4.singer_id = ?  GROUP BY t1.album_id;";
     private static final String SQL_SELECT_BY_SINGER_ID = "SELECT t1.* FROM album AS t1 INNER JOIN audio_track AS t2 ON t1.album_id=t2.album_id" +
             " INNER JOIN singer_has_audio_track AS t3 ON t2.audio_track_id=t3.audio_track_id INNER JOIN singer AS t4 ON t3.singer_id=t4.singer_id" +
             "  WHERE t3.featured_musician != 1 AND t1.album_blocked !=1 AND t4.singer_id = ?  GROUP BY t1.album_id;";
@@ -43,6 +46,7 @@ public class AlbumDAO extends AbstractDAO<Album> {
             "SET a2.album_blocked=1, a1.audio_track_blocked = 1 WHERE a2.album_id= ? AND a2.album_id=a1.album_id;";
     private static final String SQL_UPDATE_ALBUM = "UPDATE album SET `album_name`= ? , `album_release_year`= ?  WHERE `album_id`= ?;";
     private static final String SQL_UPDATE_ALBUM_COVER = "UPDATE album SET `album_cover`= ? WHERE `album_id`= ?;\n";
+    private static final String SQL_INSERT_ALBUM ="INSERT INTO `album` ( `album_name`, `album_release_year`, `album_cover`) VALUES (?, ?,?);";
 
 
     public AlbumDAO(ProxyConnection connection) {
@@ -56,6 +60,23 @@ public class AlbumDAO extends AbstractDAO<Album> {
 
     @Override
     public void create(Album entity) throws DAOException {
+        PreparedStatement stmt = null;
+        try {
+            stmt = connection.prepareStatement(SQL_INSERT_ALBUM, Statement.RETURN_GENERATED_KEYS);
+            stmt.setString(1, entity.getAlbumName());
+            stmt.setInt(2, entity.getReleaseYear());
+            stmt.setString(3, entity.getCoverURI());
+            stmt.executeUpdate();
+            ResultSet rs = stmt.getGeneratedKeys();
+            if (rs.next()) {
+                entity.setId(rs.getLong(1));
+            }
+        }
+        catch (SQLException e) {
+            throw new DAOException(e);
+        } finally {
+            this.close(stmt);
+        }
     }
 
     @Override
@@ -107,6 +128,10 @@ public class AlbumDAO extends AbstractDAO<Album> {
 
     public List<Album> findAlbumBySingerId(long id) throws DAOException {
         return findEntityByParameter(SQL_SELECT_BY_SINGER_ID, String.valueOf(id), false);
+    }
+
+    public List<Album> findNonBlockedAlbumBySingerId(long id) throws DAOException {
+        return findEntityByParameter(SQL_SELECT_NON_BLOCKED_BY_SINGER_ID, String.valueOf(id), false);
     }
 
     public List<Album> findPopularAlbums() throws DAOException {

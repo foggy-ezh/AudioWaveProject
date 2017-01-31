@@ -21,6 +21,8 @@ public class CommandCurrentSinger implements ICommandAction {
     private static final String PARAM_ID = "id";
     private static final String PARAM_SINGER = "singer";
     private static final String PARAM_SYMBOL = "symbol";
+    private static final String ROLE = "role";
+
 
     @Override
     public String execute(HttpServletRequest request) throws IOException, ServletException {
@@ -46,7 +48,7 @@ public class CommandCurrentSinger implements ICommandAction {
                 }
                 if (proceed) {
                     AlbumService albumService = new AlbumService();
-                    List<Album> list = albumService.getSingerAlbums(singer.getId());
+                    List<Album> list = albumService.getSingerAlbums(singer.getId(),request.getParameter(ROLE));
                     singer.setAlbums(list);
                 }
             } catch (ServiceException e) {

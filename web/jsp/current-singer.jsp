@@ -59,8 +59,6 @@
                                         <input type="file" name="cover" accept=".jpg"/><br>
                                         <input type="hidden" name="albumId" value="${changeAlbum.id}"/>
                                         <input type="hidden" name="command" value="add_album"/>
-                                        <button type="submit" class="btn" id="login-btn"><fmt:message
-                                                key="button.change"/></button>
                                     </c:when>
                                     <c:otherwise>
                                         <input type="hidden" name="command" value="add_album"/>
@@ -74,14 +72,18 @@
                                         <span><fmt:message key="header.name"/></span><br>
                                         <input type="text" name="audioName" required><br>
                                         <fmt:message key="download.audio"/><br>
-                                        <input type="file" name="cover" accept=".mp3" required/><br>
+                                        <input type="file" name="audiotrack" accept=".mp3" required/><br>
                                         <span><fmt:message key="add.cost"/></span><br>
                                         <input type="text" name="audioCost" required pattern="^\d{1,3}\.\d{0,2}$"><br>
+                                        <span><fmt:message key="singer.featured"/></span><br>
+                                        <input type="text" name="featured_singer[]"><br>
+                                        <input type="button" class="btn" value="<fmt:message
+                                                key="button.add"/>" id="form_status_added"><br>
                                         <input type="hidden" name="singerId" value="${singer.id}"/>
-                                        <button type="submit" class="btn" id="login-btn"><fmt:message
-                                                key="button.add"/></button>
                                     </c:otherwise>
                                 </c:choose>
+                                <button type="submit" class="btn btn-buy" id="login-btn"><fmt:message
+                                        key="button.send"/></button>
                             </form>
                         </div>
                         <div class="modal-footer">

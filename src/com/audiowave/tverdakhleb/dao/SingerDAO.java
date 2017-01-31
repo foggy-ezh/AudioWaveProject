@@ -16,6 +16,7 @@ public class SingerDAO extends AbstractDAO<Singer> {
     private static final String COLUMN_NAME = "singer_name";
 
     private static final String SQL_SELECT_BY_ID = "SELECT * FROM singer WHERE singer_id=?";
+    private static final String SQL_SELECT_BY_NAME = "SELECT * FROM singer WHERE singer_name=?";
     private static final String SQL_SELECT_BY_AUDIOTRACK_ID = "SELECT * FROM singer " +
             "INNER JOIN singer_has_audio_track " +
             " ON singer.singer_id = singer_has_audio_track.singer_id " +
@@ -104,6 +105,13 @@ public class SingerDAO extends AbstractDAO<Singer> {
 
     public Singer findSingerById(long id) throws DAOException {
         List<Singer> list = findEntityByParameter(SQL_SELECT_BY_ID, String.valueOf(id), false);
+        if(list != null && !list.isEmpty()){
+            return list.get(0);
+        }
+        return null;
+    }
+    public Singer findSingerByName(String name) throws DAOException {
+        List<Singer> list = findEntityByParameter(SQL_SELECT_BY_ID, name, false);
         if(list != null && !list.isEmpty()){
             return list.get(0);
         }

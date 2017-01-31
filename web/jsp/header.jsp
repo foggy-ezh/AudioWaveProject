@@ -77,7 +77,7 @@
                         <p><fmt:message key="header.login.input"/></p>
                     </div>
                     <div class="modal-body">
-                        <form name="log_in" method="post" action="AudioWave">
+                        <form name="log_in" method="get" action="AudioWave">
                             <span><fmt:message key="header.login.login"/></span><br>
                             <input type="text" name="login"><br>
                             <p></p>

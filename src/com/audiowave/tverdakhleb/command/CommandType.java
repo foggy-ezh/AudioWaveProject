@@ -88,7 +88,6 @@ public enum CommandType {
 
     public static ICommandAction defineCommand(HttpServletRequest request){
         String action = request.getParameter(COMMAND);
-        System.out.println("Action "+action);
         ICommandAction command = new EmptyCommand();
         if(action == null || action.isEmpty() || action.equals("null")){
             return command;

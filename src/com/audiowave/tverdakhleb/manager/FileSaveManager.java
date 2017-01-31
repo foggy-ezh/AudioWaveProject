@@ -14,14 +14,14 @@ public class FileSaveManager {
     private static final String CONTENT_DISPOSITION = "content-disposition";
 
 
-    public String saveAlbumCover(Part partCover, Long albumId, String albumName) throws FailedManagerWorkException {
-        String fileName = extractFileName(partCover);
+    public String saveUploadedFile(Part part, int releaseYear, String albumName) throws FailedManagerWorkException {
+        String fileName = extractFileName(part);
         System.out.println("filename1 "+fileName);
-        String fullName = albumAbsolutePath(albumId,albumName) + File.separator + fileName;
+        String fullName = albumAbsolutePath(releaseYear,albumName) + File.separator + fileName;
         deletePrevious(fullName);
         System.out.println("fullName " + fullName);
         try {
-            partCover.write(fullName);
+            part.write(fullName);
         } catch (IOException e) {
             throw new FailedManagerWorkException(e);
         }
@@ -30,9 +30,9 @@ public class FileSaveManager {
     /**
      * Extracts file name from HTTP header content-disposition
      */
-    private String albumAbsolutePath(Long albumId, String albumName){
+    private String albumAbsolutePath(int releaseYear, String albumName){
         // constructs path of the directory to save uploaded file
-        String savePath = ABSOLUTE_PATH + albumId + albumName;
+        String savePath = ABSOLUTE_PATH + releaseYear +" - "+ albumName ;
         // creates the save directory if it does not exists
         File fileSaveDir = new File(savePath);
         if (!fileSaveDir.exists()) {
@@ -40,6 +40,7 @@ public class FileSaveManager {
         }
         return savePath;
     }
+
     private void deletePrevious( String fullName){
         // Delete previous file if exists
         File fileSaveDir = new File(fullName);
