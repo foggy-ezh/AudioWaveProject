@@ -44,6 +44,7 @@ public class SingerDAO extends AbstractDAO<Singer> {
             " FROM singer ORDER BY singer_name) as singer1 WHERE singer1.letter LIKE ? LIMIT ? , ? ;";
     private static final String SQL_INSERT_SINGER = "INSERT INTO singer (`singer_name`) VALUES (?);";
     private static final String SQL_UPDATE_SINGER = "UPDATE singer SET `singer_name`= ? WHERE `singer_id`= ?;";
+    private static final String SQL_DELETE_FEATURED_SINGERS = "DELETE FROM `singer_has_audio_track` WHERE `featured_musician`='1' AND `audio_track_id`= ?;";
 
     public SingerDAO(ProxyConnection connection) {
         super(connection);
@@ -111,7 +112,7 @@ public class SingerDAO extends AbstractDAO<Singer> {
         return null;
     }
     public Singer findSingerByName(String name) throws DAOException {
-        List<Singer> list = findEntityByParameter(SQL_SELECT_BY_ID, name, false);
+        List<Singer> list = findEntityByParameter(SQL_SELECT_BY_NAME, name, false);
         if(list != null && !list.isEmpty()){
             return list.get(0);
         }
@@ -143,5 +144,19 @@ public class SingerDAO extends AbstractDAO<Singer> {
 
     public int findSingerBySymbol(List<Singer> list, String symbol, int start, int count) throws DAOException {
         return findEntityBySymbol(SQL_SELECT_BY_SYMBOL, list, symbol, start, count);
+    }
+
+    public void deletePreviousFeaturedSingers(long audioId) throws DAOException {
+        PreparedStatement stmt = null;
+        try {
+            stmt = connection.prepareStatement(SQL_DELETE_FEATURED_SINGERS);
+            stmt.setLong(1, audioId);
+            stmt.executeUpdate();
+        }
+        catch (SQLException e) {
+            throw new DAOException(e);
+        } finally {
+            this.close(stmt);
+        }
     }
 }

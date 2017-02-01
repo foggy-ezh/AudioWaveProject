@@ -72,7 +72,40 @@ public class AudiotrackService extends AbstractService {
         return list;
     }
 
-    public void insertNewAudiotrack(String audioName,Part partAudio,BigDecimal cost,long albumId,long singerId,String[] featuredSingers) throws ServiceException {
+    public void updateAudio(long audioId, String audioName, BigDecimal cost, Part partAudio, long albumId, String[] featuredSingers) throws ServiceException {
+        audioName = Jsoup.clean(audioName, Whitelist.basic());
+        if (!audioName.isEmpty()) {
+            ConnectionPool pool = ConnectionPool.getInstance();
+            ProxyConnection connection = null;
+            try {
+                connection = pool.getConnection();
+                AlbumDAO albumDAO = new AlbumDAO(connection);
+                Album album = albumDAO.findAlbumById(albumId);
+                AudiotrackDAO audiotrackDAO = new AudiotrackDAO(connection);
+                Audiotrack audiotrack;
+                if (partAudio.getSize() != 0) {
+                    FileSaveManager saveManager = new FileSaveManager();
+                    String location = saveManager.saveUploadedFile(partAudio, album.getReleaseYear(), album.getAlbumName());
+                    audiotrack = new Audiotrack(audioId, audioName, location, cost, false, albumId);
+                    audiotrackDAO.updateLocation(audiotrack);
+                } else {
+                    audiotrack = new Audiotrack(audioId, audioName, null, cost, false, albumId);
+                }
+                audiotrackDAO.update(audiotrack);
+                SingerDAO singerDAO = new SingerDAO(connection);
+                singerDAO.deletePreviousFeaturedSingers(audioId);
+                if (featuredSingers != null) {
+                    insertFeaturedSingers(connection, audioId, featuredSingers);
+                }
+            } catch (DAOException | FailedManagerWorkException e) {
+                throw new ServiceException(e);
+            } finally {
+                restorePoolConnection(pool, connection);
+            }
+        }
+    }
+
+    public void insertNewAudiotrack(String audioName, Part partAudio, BigDecimal cost, long albumId, long singerId, String[] featuredSingers) throws ServiceException {
         audioName = Jsoup.clean(audioName, Whitelist.basic());
         if (!audioName.isEmpty()) {
             ConnectionPool pool = ConnectionPool.getInstance();
@@ -87,20 +120,32 @@ public class AudiotrackService extends AbstractService {
                 Audiotrack audiotrack = new Audiotrack(0, audioName, location, cost, false, albumId);
                 audiotrackDAO.create(audiotrack);
                 audiotrackDAO.connectAudiotrackWithSinger(singerId, audiotrack.getId(), false);
-                SingerDAO singerDAO = new SingerDAO(connection);
-                for (String singerName: featuredSingers){
-                    if(!singerName.isEmpty()){
-                        Singer singer = singerDAO.findSingerByName(singerName);
-                        if(singer != null){
-                            audiotrackDAO.connectAudiotrackWithSinger(singer.getId(), audiotrack.getId(), true);
-                        }
-                    }
+                if (featuredSingers != null) {
+                    insertFeaturedSingers(connection, audiotrack.getId(), featuredSingers);
                 }
             } catch (DAOException | FailedManagerWorkException e) {
                 throw new ServiceException(e);
             } finally {
                 restorePoolConnection(pool, connection);
             }
+        }
+    }
+
+    private void insertFeaturedSingers(ProxyConnection connection, long audioId, String[] featuredSingers) throws ServiceException {
+        try {
+            SingerDAO singerDAO = new SingerDAO(connection);
+            AudiotrackDAO audiotrackDAO = new AudiotrackDAO(connection);
+            for (String singerName : featuredSingers) {
+                if (!singerName.isEmpty()) {
+                    Singer singer = singerDAO.findSingerByName(singerName);
+                    if (singer != null) {
+                        audiotrackDAO.connectAudiotrackWithSinger(singer.getId(), audioId, true);
+                    }
+
+                }
+            }
+        } catch (DAOException e) {
+            throw new ServiceException(e);
         }
     }
 }

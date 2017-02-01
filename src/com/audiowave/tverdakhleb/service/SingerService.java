@@ -99,4 +99,18 @@ public class SingerService extends AbstractService {
             }
         }
     }
+
+    public List<Singer> getFeaturedSingersForAudio(long audioId) throws ServiceException {
+        ConnectionPool pool = ConnectionPool.getInstance();
+        ProxyConnection connection = null;
+        try {
+            connection = pool.getConnection();
+            SingerDAO singerDAO = new SingerDAO(connection);
+            return singerDAO.findFeaturedSingerByAudiotrackId(audioId);
+        } catch (DAOException e) {
+            throw new ServiceException(e);
+        } finally {
+            restorePoolConnection(pool, connection);
+        }
+    }
 }

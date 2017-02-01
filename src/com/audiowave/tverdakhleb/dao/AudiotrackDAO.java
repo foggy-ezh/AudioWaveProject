@@ -30,7 +30,8 @@ public class AudiotrackDAO extends AbstractDAO<Audiotrack> {
     private static final String SQL_UPDATE_SET_BLOCKED = "UPDATE audio_track SET audio_track_blocked=1 WHERE audio_track_id=?;";
     private static final String SQL_INSERT_AUDIOTRACK = "INSERT INTO `audio_track` (`audio_track_name`, `audio_track_location`, `audio_track_cost`, `album_id`) VALUES (?, ?, ?, ?);\n";
     private static final String SQL_INSERT_SINGER_HAS_AUDIOTRACK = "INSERT INTO `singer_has_audio_track` (`singer_id`, `audio_track_id`, `featured_musician`) VALUES (?, ?, ?);\n";
-
+    private static final String SQL_UPDATE_AUDIOTRACK = "UPDATE `audio_track` SET `audio_track_name`= ?, `audio_track_cost`= ? WHERE `audio_track_id`= ?;";
+    private static final String SQL_UPDATE_AUDIOTRACK_LOCATION = "UPDATE `audio_track` SET `audio_track_location`= ? WHERE `audio_track_id`= ?;";
 
     public AudiotrackDAO(ProxyConnection connection) {
         super(connection);
@@ -65,6 +66,34 @@ public class AudiotrackDAO extends AbstractDAO<Audiotrack> {
 
     @Override
     public void update(Audiotrack entity) throws DAOException {
+        PreparedStatement stmt = null;
+        try {
+            stmt = connection.prepareStatement(SQL_UPDATE_AUDIOTRACK);
+            stmt.setString(1, entity.getName());
+            stmt.setBigDecimal(2, entity.getCost());
+            stmt.setLong(3, entity.getId());
+            stmt.executeUpdate();
+        }
+        catch (SQLException e) {
+            throw new DAOException(e);
+        } finally {
+            this.close(stmt);
+        }
+    }
+
+    public void updateLocation(Audiotrack entity) throws DAOException {
+        PreparedStatement stmt = null;
+        try {
+            stmt = connection.prepareStatement(SQL_UPDATE_AUDIOTRACK_LOCATION);
+            stmt.setString(1, entity.getLocation());
+            stmt.setLong(2, entity.getId());
+            stmt.executeUpdate();
+        }
+        catch (SQLException e) {
+            throw new DAOException(e);
+        } finally {
+            this.close(stmt);
+        }
     }
 
     @Override

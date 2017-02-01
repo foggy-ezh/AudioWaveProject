@@ -26,7 +26,7 @@
             <li><a href="<c:url value="/AudioWave?command=album"/>"><fmt:message key="singer.albums"/></a></li>
             <li><a href="<c:url value="/AudioWave?command=album&symbol=${symbol}"/>">${symbol}</a></li>
             <li class="active">${album.albumName}</li>
-            <%--<c:if test="${role eq 'admin'}">
+            <c:if test="${role eq 'admin'}">
                 <div class="btn-add">
                     <button type="button" class="btn-buy" data-toggle="modal" data-target="#AddAudioModal">
                         <fmt:message key="button.add"/>
@@ -39,26 +39,48 @@
                             <div class="modal-header">
                                 <button type="button" class="close" data-dismiss="modal"
                                         aria-hidden="true">&times;</button>
-                                <h4 class="modal-title" id="myModalLabel"><fmt:message key="header.auth"/></h4>
-                                <p><fmt:message key="header.login.input"/></p>
+                                <h4 class="modal-title" id="myModalLabel"><fmt:message key="add.audiotrack"/></h4>
                             </div>
                             <div class="modal-body">
                                 <form name="log_in" method="post" action="AudioWave" enctype="multipart/form-data">
-                                    <span><fmt:message key="header.login.login"/></span><br>
-                                    <input type="text" name="login"><br>
-                                    <p></p>
-                                    <span><fmt:message key="header.login.password"/></span><br>
-                                    <input type="file" name="file" accept=".mp3" required/><br>
-                                    <button type="submit" class="btn" id="login-btn"><fmt:message
-                                            key="header.login"/></button>
-                                    <input type="hidden" name="command" value="log_in"/>
+                                    <c:choose>
+                                        <c:when test="${not empty changeAudio}">
+                                            <input type="hidden" name="command" value="add_audio"/>
+                                            <span><fmt:message key="header.name"/></span><br>
+                                            <input type="text" name="audioName" required value="${changeAudio.name}"><br>
+                                            <fmt:message key="download.audio"/><br>
+                                            <input type="file" name="audiotrack" accept=".mp3"/><br>
+                                            <span><fmt:message key="add.cost"/></span><br>
+                                            <input type="text" name="audioCost" required pattern="^\d{1,3}\.\d{0,2}$"
+                                                   value="${changeAudio.cost}"><br>
+                                            <span><fmt:message key="singer.featured"/></span><br>
+                                            <c:forEach items="${changeAudio.featuredSinger}" var="featSinger">
+                                                <input type="text" name="featured_singer[]" value="${featSinger.name}"><br>
+                                            </c:forEach>
+                                            <input type="button" class="btn" value="<fmt:message
+                                                key="button.add"/>" id="form_status_added"><br>
+                                            <input type="hidden" name="audioId" value="${changeAudio.id}"/>
+                                            <input type="hidden" name="albumId" value="${album.id}"/>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <input type="hidden" name="command" value="add_audio"/>
+                                            <span><fmt:message key="header.name"/></span><br>
+                                            <input type="text" name="audioName" required><br>
+                                            <fmt:message key="download.audio"/><br>
+                                            <input type="file" name="audiotrack" accept=".mp3" required/><br>
+                                            <span><fmt:message key="add.cost"/></span><br>
+                                            <input type="text" name="audioCost" required pattern="^\d{1,3}\.\d{0,2}$"><br>
+                                            <span><fmt:message key="singer.featured"/></span><br>
+                                            <input type="text" name="featured_singer[]"><br>
+                                            <input type="button" class="btn" value="<fmt:message
+                                                key="button.add"/>" id="form_status_added"><br>
+                                            <input type="hidden" name="albumId" value="${album.id}"/>
+                                            <input type="hidden" name="singerId" value="${album.singer.id}"/>
+                                        </c:otherwise>
+                                    </c:choose>
+                                    <button type="submit" class="btn btn-buy" id="login-btn"><fmt:message
+                                            key="button.send"/></button>
                                 </form>
-                                <p id="login-err"></p>
-                                <p><fmt:message key="header.login.not.reg"/>
-                                    <a href="#myModall" data-toggle="modal" class="fire-brick">
-                                        <fmt:message key="header.login.register"/>
-                                    </a>
-                                </p>
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-default" data-dismiss="modal"><fmt:message
@@ -67,7 +89,7 @@
                         </div>
                     </div>
                 </div>
-            </c:if>--%>
+            </c:if>
         </ul>
         <hr>
         <div>
@@ -141,7 +163,9 @@
                                             <button type="submit" class="btn-buy" id="change-btn"><fmt:message
                                                     key="button.change"/></button>
                                             <input type="hidden" name="command" value="change_audio"/>
-                                            <input type="hidden" name="id" value="${item.id}"/>
+                                            <input type="hidden" name="audioId" value="${item.id}"/>
+                                            <input type="hidden" name="audioName" value="${item.name}"/>
+                                            <input type="hidden" name="cost" value="${item.cost}"/>
                                         </form>
                                     </div>
                                     <div class="inline-block audio-info cost">
@@ -156,8 +180,8 @@
                                         <div class="inline-block audio-info">
                                             <fmt:message key="singer.feat"/>
                                             <c:forEach items="${item.featuredSinger}" var="featured">
-                                                <a href="<c:url value="/AudioWave?command=current_singer&id=${featured.id}"/>"
-                                                >${featured.name}
+                                                <a href="<c:url value="/AudioWave?command=current_singer&id=${featured.id}"/>">
+                                                ${featured.name}
                                                 </a>
                                             </c:forEach>
                                         </div>

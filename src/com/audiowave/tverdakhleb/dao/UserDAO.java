@@ -16,7 +16,6 @@ public class UserDAO extends AbstractDAO<User> {
     private static final String COLUMN_LOGIN = "login";
     private static final String COLUMN_PASSWORD = "user_password";
     private static final String COLUMN_IS_ADMIN = "isAdmin";
-    private static final String COLUMN_DISCOUNT_ID = "discount_id";
 
     private static final String SQL_SELECT_BY_LOGIN = "SELECT * FROM user WHERE user.login = ?;";
     private static final String SQL_INSERT_USER = "INSERT INTO mydb.user (`login`, `user_password`) VALUES (?,?);";
@@ -85,8 +84,7 @@ public class UserDAO extends AbstractDAO<User> {
                     String login = resultSet.getString(COLUMN_LOGIN);
                     String password = resultSet.getString(COLUMN_PASSWORD);
                     boolean isAdmin = resultSet.getBoolean(COLUMN_IS_ADMIN);
-                    long discountId = resultSet.getLong(COLUMN_DISCOUNT_ID);
-                    list.add(new User(id, login, password, isAdmin, discountId));
+                    list.add(new User(id, login, password, isAdmin));
                 }
             } catch (SQLException e) {
                 throw new DAOException(e);

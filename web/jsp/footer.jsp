@@ -77,6 +77,10 @@
     $("#AddAlbumModal").modal('show');
     <c:remove var="changeAlbum"/>
     </c:if>
+    <c:if test="${not empty changeAudio}">
+    $("#AddAudioModal").modal('show');
+    <c:remove var="changeAudio"/>
+    </c:if>
 </script>
 </body>
 </html>

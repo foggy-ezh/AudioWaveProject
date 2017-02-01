@@ -79,6 +79,14 @@ public enum CommandType {
     ADD_ALBUM{
         @Override
         public ICommandAction getCommand() {return new CommandAddAlbum();}
+    },
+    CHANGE_AUDIO{
+        @Override
+        public ICommandAction getCommand() {return new CommandChangeAudio();}
+    },
+    ADD_AUDIO{
+        @Override
+        public ICommandAction getCommand() {return new CommandAddAudio();}
     };
 
     private static final Logger LOGGER = LogManager.getLogger();

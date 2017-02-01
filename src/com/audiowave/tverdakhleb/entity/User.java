@@ -4,25 +4,22 @@ public class User extends Entity{
     private String login;
     private String password;
     private boolean isAdmin;
-    private long discountId;
     private String mail;
     private String firstName;
     private String lastName;
 
-    public User(long id, String login, String password, boolean isAdmin, long discountId) {
+    public User(long id, String login, String password, boolean isAdmin) {
         super(id);
         this.login = login;
         this.password = password;
         this.isAdmin = isAdmin;
-        this.discountId = discountId;
     }
 
-    public User(long id, String login, String password, boolean isAdmin, long discountId, String mail, String firstName, String lastName) {
+    public User(long id, String login, String password, boolean isAdmin, String mail, String firstName, String lastName) {
         super(id);
         this.login = login;
         this.password = password;
         this.isAdmin = isAdmin;
-        this.discountId = discountId;
         this.mail = mail;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -54,18 +51,6 @@ public class User extends Entity{
 
     public void setAdmin(boolean admin) {
         isAdmin = admin;
-    }
-
-    public long getDiscountId() {
-        return discountId;
-    }
-
-    public void setDiscountId(int discountId) {
-        this.discountId = discountId;
-    }
-
-    public void setDiscountId(long discountId) {
-        this.discountId = discountId;
     }
 
     public String getMail() {
@@ -101,7 +86,6 @@ public class User extends Entity{
         User user = (User) o;
 
         if (isAdmin != user.isAdmin) return false;
-        if (discountId != user.discountId) return false;
         if (login != null ? !login.equals(user.login) : user.login != null) return false;
         if (password != null ? !password.equals(user.password) : user.password != null) return false;
         if (mail != null ? !mail.equals(user.mail) : user.mail != null) return false;
@@ -115,7 +99,6 @@ public class User extends Entity{
         result = 31 * result + (login != null ? login.hashCode() : 0);
         result = 31 * result + (password != null ? password.hashCode() : 0);
         result = 31 * result + (isAdmin ? 1 : 0);
-        result = 31 * result + (int) (discountId ^ (discountId >>> 32));
         result = 31 * result + (mail != null ? mail.hashCode() : 0);
         result = 31 * result + (firstName != null ? firstName.hashCode() : 0);
         result = 31 * result + (lastName != null ? lastName.hashCode() : 0);
