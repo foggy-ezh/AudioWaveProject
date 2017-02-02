@@ -32,6 +32,7 @@ public class AudiotrackDAO extends AbstractDAO<Audiotrack> {
     private static final String SQL_INSERT_SINGER_HAS_AUDIOTRACK = "INSERT INTO `singer_has_audio_track` (`singer_id`, `audio_track_id`, `featured_musician`) VALUES (?, ?, ?);\n";
     private static final String SQL_UPDATE_AUDIOTRACK = "UPDATE `audio_track` SET `audio_track_name`= ?, `audio_track_cost`= ? WHERE `audio_track_id`= ?;";
     private static final String SQL_UPDATE_AUDIOTRACK_LOCATION = "UPDATE `audio_track` SET `audio_track_location`= ? WHERE `audio_track_id`= ?;";
+    private static final String SQL_SELECT_USER_ID = "SELECT * FROM audio_track INNER JOIN user_has_audio_track ON user_has_audio_track.audio_track_id=audio_track.audio_track_id WHERE user_id = ?;";
 
     public AudiotrackDAO(ProxyConnection connection) {
         super(connection);
@@ -153,5 +154,9 @@ public class AudiotrackDAO extends AbstractDAO<Audiotrack> {
         } finally {
             this.close(stmt);
         }
+    }
+
+    public List<Audiotrack> findUserAudiotracks(long userId) throws DAOException {
+        return findEntityByParameter(SQL_SELECT_USER_ID, String.valueOf(userId), false);
     }
 }

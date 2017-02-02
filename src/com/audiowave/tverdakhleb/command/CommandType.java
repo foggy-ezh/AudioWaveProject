@@ -87,6 +87,10 @@ public enum CommandType {
     ADD_AUDIO{
         @Override
         public ICommandAction getCommand() {return new CommandAddAudio();}
+    },
+    USER_AUDIOTRACKS{
+        @Override
+        public ICommandAction getCommand() {return new CommandUserAudiotracks();}
     };
 
     private static final Logger LOGGER = LogManager.getLogger();

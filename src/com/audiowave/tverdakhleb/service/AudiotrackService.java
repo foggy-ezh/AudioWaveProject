@@ -16,6 +16,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.safety.Whitelist;
 
 import javax.servlet.http.Part;
+import javax.sql.PooledConnection;
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -146,6 +147,26 @@ public class AudiotrackService extends AbstractService {
             }
         } catch (DAOException e) {
             throw new ServiceException(e);
+        }
+    }
+
+    public List<Audiotrack> getUserAudiotracks(long userId) throws ServiceException{
+        ConnectionPool pool = ConnectionPool.getInstance();
+        ProxyConnection connection = null;
+        try{
+            connection = pool.getConnection();
+            AudiotrackDAO audiotrackDAO = new AudiotrackDAO(connection);
+            List<Audiotrack> list = audiotrackDAO.findUserAudiotracks(userId);
+            SingerDAO singerDAO = new SingerDAO(connection);
+            for (Audiotrack audio : list) {
+                Singer singer = singerDAO.findSingerByAudiotrackId(audio.getId());
+                audio.setSinger(singer);
+            }
+            return list;
+        } catch (DAOException e) {
+            throw new ServiceException(e);
+        } finally {
+            restorePoolConnection(pool, connection);
         }
     }
 }

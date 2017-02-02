@@ -53,9 +53,11 @@
                                     <b class="caret"></b>
                                 </a>
                                 <ul role="menu" class="dropdown-menu">
-                                    <li><a href="#">Моя аудиотека</a></li>
-                                    <li><a href="#">Настройки</a></li>
+                                    <c:if test="${role eq 'user'}">
+                                    <li><a href="/AudioWave?command=user_audiotracks"><fmt:message key="header.my.audio"/></a></li>
+                                    <li><a href="#"><fmt:message key="header.settings"/></a></li>
                                     <li class="divider"></li>
+                                    </c:if>
                                     <li><a href="<c:url value="/AudioWave?command=log_out"/>">
                                         <fmt:message key="header.exit"/>
                                     </a></li>

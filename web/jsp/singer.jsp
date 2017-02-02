@@ -110,8 +110,8 @@
                         <li class="active"><a href="#">${i}</a></li>
                     </c:when>
                     <c:otherwise>
-                        <li class="active"><a
-                                href="<c:url value="/AudioWave?command=singer&symbol=${symbol}&page=${i}"/>">${i}</a>
+                        <li>
+                            <a href="<c:url value="/AudioWave?command=singer&symbol=${symbol}&page=${i}"/>">${i}</a>
                         </li>
                     </c:otherwise>
                 </c:choose>
