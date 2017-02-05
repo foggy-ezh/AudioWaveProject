@@ -13,6 +13,7 @@ import com.audiowave.tverdakhleb.entity.User;
 import com.audiowave.tverdakhleb.exception.DAOException;
 import org.testng.annotations.Test;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -70,7 +71,7 @@ public class TestDAO {
     }
 
     @Test
-    public void findSingerBySymbolTest(){
+    public void findSingerBySymbolTest() throws SQLException {
         ConnectionPool pool = ConnectionPool.getInstance();
         ProxyConnection connection = null;
         try {

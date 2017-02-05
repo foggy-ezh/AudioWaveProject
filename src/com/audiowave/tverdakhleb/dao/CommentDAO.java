@@ -77,12 +77,8 @@ public class CommentDAO extends AbstractDAO<AlbumComment> {
         }
     }
 
-    @Override
-    void parseFullResultSet(ResultSet resultSet, List<AlbumComment> list) throws DAOException {
-    }
-
     public List<AlbumComment> findCommentsByAlbumId(long id) throws DAOException {
-        return findEntityByParameter(SQL_SELECT_COMMENTS_BY_ALBUM_ID, String.valueOf(id), false);
+        return findEntityByParameter(SQL_SELECT_COMMENTS_BY_ALBUM_ID, String.valueOf(id));
     }
 
 }

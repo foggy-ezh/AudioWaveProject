@@ -1,7 +1,7 @@
 package test.com.audiowave.tverdakhleb;
 
 import com.audiowave.tverdakhleb.exception.ServiceException;
-import com.audiowave.tverdakhleb.service.LogInCheckService;
+import com.audiowave.tverdakhleb.service.UserService;
 import org.mindrot.jbcrypt.BCrypt;
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -16,9 +16,9 @@ public class TestLogInCheck {
 
         String h1 = BCrypt.hashpw(pw1, BCrypt.gensalt());
         System.out.println(h1);
-        if (BCrypt.checkpw(pw2, h1)){
-            System.out.println("It matches");}
-        else{
+        if (BCrypt.checkpw(pw2, h1)) {
+            System.out.println("It matches");
+        } else {
             Assert.fail("It does not match");
         }
     }
@@ -26,7 +26,7 @@ public class TestLogInCheck {
 
     @Test
     public void testLogin() throws ServiceException {
-        LogInCheckService service = new LogInCheckService();
+        UserService service = new UserService();
         String login = "artem";
         System.out.println(service.checkLogin(login));
     }

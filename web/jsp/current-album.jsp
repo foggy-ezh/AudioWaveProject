@@ -190,10 +190,11 @@
                                 <c:otherwise>
                                     <c:if test="${!item.blocked}">
                                         <div class="inline-block">
-                                            <form method="post" action="AudioWave">
+                                            <form method="post" onsubmit='return buyAudioInfo()' action="AudioWave">
                                                 <button type="submit" class="btn-buy" id="buy-btn"><fmt:message
                                                         key="button.buy"/></button>
-                                                <input type="hidden" name="command" value="buy"/>
+                                                <input type="hidden" name="command" value="buy_audio"/>
+                                                <input type="hidden" name="audioId" value="${item.id}"/>
                                             </form>
                                         </div>
                                         <div class="inline-block audio-info cost">
@@ -277,5 +278,10 @@
     </c:otherwise>
 </c:choose>
 <%@include file="footer.jsp" %>
+<script>
+    function buyAudioInfo() {
+        return confirm("<fmt:message key="buy.audio.info"/>");
+    }
+</script>
 </body>
 </html>

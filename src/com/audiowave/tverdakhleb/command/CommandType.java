@@ -91,6 +91,22 @@ public enum CommandType {
     USER_AUDIOTRACKS{
         @Override
         public ICommandAction getCommand() {return new CommandUserAudiotracks();}
+    },
+    CHANGE_USER{
+        @Override
+        public ICommandAction getCommand() {return new CommandChangeUser();}
+    },
+    GET_FUNDS{
+        @Override
+        public ICommandAction getCommand() {return new CommandGetFunds();}
+    },
+    ADD_FUNDS{
+        @Override
+        public ICommandAction getCommand() {return new CommandAddFunds();}
+    },
+    BUY_AUDIO{
+        @Override
+        public ICommandAction getCommand() {return new CommandBuyAudio();}
     };
 
     private static final Logger LOGGER = LogManager.getLogger();

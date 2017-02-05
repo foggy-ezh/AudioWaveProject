@@ -1,5 +1,7 @@
 package com.audiowave.tverdakhleb.entity;
 
+import java.math.BigDecimal;
+
 public class User extends Entity{
     private String login;
     private String password;
@@ -7,22 +9,13 @@ public class User extends Entity{
     private String mail;
     private String firstName;
     private String lastName;
+    private BigDecimal amountOfMoney;
 
     public User(long id, String login, String password, boolean isAdmin) {
         super(id);
         this.login = login;
         this.password = password;
         this.isAdmin = isAdmin;
-    }
-
-    public User(long id, String login, String password, boolean isAdmin, String mail, String firstName, String lastName) {
-        super(id);
-        this.login = login;
-        this.password = password;
-        this.isAdmin = isAdmin;
-        this.mail = mail;
-        this.firstName = firstName;
-        this.lastName = lastName;
     }
 
     public User() {
@@ -77,6 +70,14 @@ public class User extends Entity{
         this.lastName = lastName;
     }
 
+    public BigDecimal getAmountOfMoney() {
+        return amountOfMoney;
+    }
+
+    public void setAmountOfMoney(BigDecimal amountOfMoney) {
+        this.amountOfMoney = amountOfMoney;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -90,7 +91,8 @@ public class User extends Entity{
         if (password != null ? !password.equals(user.password) : user.password != null) return false;
         if (mail != null ? !mail.equals(user.mail) : user.mail != null) return false;
         if (firstName != null ? !firstName.equals(user.firstName) : user.firstName != null) return false;
-        return lastName != null ? lastName.equals(user.lastName) : user.lastName == null;
+        if (lastName != null ? !lastName.equals(user.lastName) : user.lastName != null) return false;
+        return amountOfMoney != null ? amountOfMoney.equals(user.amountOfMoney) : user.amountOfMoney == null;
     }
 
     @Override
@@ -102,6 +104,7 @@ public class User extends Entity{
         result = 31 * result + (mail != null ? mail.hashCode() : 0);
         result = 31 * result + (firstName != null ? firstName.hashCode() : 0);
         result = 31 * result + (lastName != null ? lastName.hashCode() : 0);
+        result = 31 * result + (amountOfMoney != null ? amountOfMoney.hashCode() : 0);
         return result;
     }
 }

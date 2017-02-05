@@ -86,10 +86,6 @@ public class SingerDAO extends AbstractDAO<Singer> {
     }
 
     @Override
-    void parseFullResultSet(ResultSet resultSet, List<Singer> list) throws DAOException {
-    }
-
-    @Override
     void parseResultSet(ResultSet resultSet, List<Singer> list) throws DAOException {
         if (resultSet != null){
             try {
@@ -105,14 +101,14 @@ public class SingerDAO extends AbstractDAO<Singer> {
     }
 
     public Singer findSingerById(long id) throws DAOException {
-        List<Singer> list = findEntityByParameter(SQL_SELECT_BY_ID, String.valueOf(id), false);
+        List<Singer> list = findEntityByParameter(SQL_SELECT_BY_ID, String.valueOf(id));
         if(list != null && !list.isEmpty()){
             return list.get(0);
         }
         return null;
     }
     public Singer findSingerByName(String name) throws DAOException {
-        List<Singer> list = findEntityByParameter(SQL_SELECT_BY_NAME, name, false);
+        List<Singer> list = findEntityByParameter(SQL_SELECT_BY_NAME, name);
         if(list != null && !list.isEmpty()){
             return list.get(0);
         }
@@ -120,18 +116,18 @@ public class SingerDAO extends AbstractDAO<Singer> {
     }
 
     public Singer findSingerByAudiotrackId(long id) throws DAOException {
-        List<Singer> list = findEntityByParameter(SQL_SELECT_BY_AUDIOTRACK_ID, String.valueOf(id), false);
+        List<Singer> list = findEntityByParameter(SQL_SELECT_BY_AUDIOTRACK_ID, String.valueOf(id));
         if(list != null && !list.isEmpty()){
             return list.get(0);
         }
         return null;
     }
     public List<Singer> findFeaturedSingerByAudiotrackId(long id) throws DAOException {
-        return findEntityByParameter(SQL_SELECT_FEATURED_BY_AUDIOTRACK_ID, String.valueOf(id), false);
+        return findEntityByParameter(SQL_SELECT_FEATURED_BY_AUDIOTRACK_ID, String.valueOf(id));
     }
 
     public Singer findSingerByAlbumId(long id) throws DAOException {
-        List<Singer> list = findEntityByParameter(SQL_SELECT_BY_ALBUM_ID, String.valueOf(id), false);
+        List<Singer> list = findEntityByParameter(SQL_SELECT_BY_ALBUM_ID, String.valueOf(id));
         if(list != null && !list.isEmpty()){
             return list.get(0);
         }

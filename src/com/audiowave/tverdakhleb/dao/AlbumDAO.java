@@ -97,10 +97,6 @@ public class AlbumDAO extends AbstractDAO<Album> {
     }
 
     @Override
-    void parseFullResultSet(ResultSet resultSet, List<Album> list) throws DAOException {
-    }
-
-    @Override
     void parseResultSet(ResultSet resultSet, List<Album> list) throws DAOException {
         if (resultSet != null) {
             try {
@@ -119,7 +115,7 @@ public class AlbumDAO extends AbstractDAO<Album> {
     }
 
     public Album findAlbumById(long id) throws DAOException {
-        List<Album> list = findEntityByParameter(SQL_SELECT_BY_ID, String.valueOf(id), false);
+        List<Album> list = findEntityByParameter(SQL_SELECT_BY_ID, String.valueOf(id));
         if (list != null && !list.isEmpty()) {
             return list.get(0);
         }
@@ -127,15 +123,15 @@ public class AlbumDAO extends AbstractDAO<Album> {
     }
 
     public List<Album> findAlbumBySingerId(long id) throws DAOException {
-        return findEntityByParameter(SQL_SELECT_BY_SINGER_ID, String.valueOf(id), false);
+        return findEntityByParameter(SQL_SELECT_BY_SINGER_ID, String.valueOf(id));
     }
 
     public List<Album> findNonBlockedAlbumBySingerId(long id) throws DAOException {
-        return findEntityByParameter(SQL_SELECT_NON_BLOCKED_BY_SINGER_ID, String.valueOf(id), false);
+        return findEntityByParameter(SQL_SELECT_NON_BLOCKED_BY_SINGER_ID, String.valueOf(id));
     }
 
     public List<Album> findPopularAlbums() throws DAOException {
-        return findResultSet(SQL_SELECT_POPULAR, false);
+        return findResultSet(SQL_SELECT_POPULAR);
     }
 
     public List<String> findNonBlockedAlbumFirstLetter() throws DAOException {

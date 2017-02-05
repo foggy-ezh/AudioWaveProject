@@ -3,7 +3,7 @@ package com.audiowave.tverdakhleb.manager;
 public class ValidationManager {
     private static final String NAME_REGEX  ="^[\\p{Upper}]+[\\p{Alpha}]*";
     private static final String MAIL_REGEX  ="^(([^<>()\\[\\]\\\\.,;:\\s@\"]+(\\.[^<>()\\[\\]\\\\.,;:\\s@\"]+)*)|(\".+\"))@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$";
-    private static final String LOGIN_REGEX ="^[\\p{Alpha}]+\\w{4,}";
+    private static final String LOGIN_REGEX ="^[\\p{Alpha}]+\\w{2,}";
     private static final String PASSWORD_REGEX ="^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?!.*\\s).*$";
 
     public boolean checkLogin(String login){

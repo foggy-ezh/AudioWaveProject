@@ -2,7 +2,7 @@ package com.audiowave.tverdakhleb.command;
 
 import com.audiowave.tverdakhleb.entity.User;
 import com.audiowave.tverdakhleb.exception.ServiceException;
-import com.audiowave.tverdakhleb.service.RegistrationService;
+import com.audiowave.tverdakhleb.service.UserService;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -19,8 +19,8 @@ public class CommandRegister implements ICommandAction {
     private static final String PARAM_LOGIN = "login";
     private static final String PARAM_PASSWORD = "pwd1";
     private static final String PARAM_MAIL = "mail";
-    private static final String PARAM_NAME = "mail";
-    private static final String PARAM_LAST_NAME = "mail";
+    private static final String PARAM_NAME = "firstName";
+    private static final String PARAM_LAST_NAME = "lastName";
 
     private static final String PARAM_LOGIN_ERR = "regErr";
     private static final String FAILED_MESSAGE_LOGIN="login";
@@ -32,7 +32,7 @@ public class CommandRegister implements ICommandAction {
         HttpSession session = request.getSession();
         String login = request.getParameter(PARAM_LOGIN);
         try {
-            RegistrationService service = new RegistrationService();
+            UserService service = new UserService();
             if(login == null || !service.checkLoginExist(login)) {
                 session.setAttribute(PARAM_LOGIN_ERR,FAILED_MESSAGE_LOGIN);
                 proceed = false;

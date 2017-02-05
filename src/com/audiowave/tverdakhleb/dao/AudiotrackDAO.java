@@ -33,6 +33,7 @@ public class AudiotrackDAO extends AbstractDAO<Audiotrack> {
     private static final String SQL_UPDATE_AUDIOTRACK = "UPDATE `audio_track` SET `audio_track_name`= ?, `audio_track_cost`= ? WHERE `audio_track_id`= ?;";
     private static final String SQL_UPDATE_AUDIOTRACK_LOCATION = "UPDATE `audio_track` SET `audio_track_location`= ? WHERE `audio_track_id`= ?;";
     private static final String SQL_SELECT_USER_ID = "SELECT * FROM audio_track INNER JOIN user_has_audio_track ON user_has_audio_track.audio_track_id=audio_track.audio_track_id WHERE user_id = ?;";
+    private static final String SQL_SELECT_BY_ID = "SELECT * FROM audio_track WHERE audio_track_blocked = 0 AND audio_track.audio_track_id = ?;" ;
 
     public AudiotrackDAO(ProxyConnection connection) {
         super(connection);
@@ -98,11 +99,6 @@ public class AudiotrackDAO extends AbstractDAO<Audiotrack> {
     }
 
     @Override
-    void parseFullResultSet(ResultSet resultSet, List<Audiotrack> list) throws DAOException {
-
-    }
-
-    @Override
      void parseResultSet(ResultSet resultSet, List<Audiotrack> list) throws DAOException {
         if (resultSet != null){
             try {
@@ -122,15 +118,15 @@ public class AudiotrackDAO extends AbstractDAO<Audiotrack> {
     }
 
     public List<Audiotrack> findPopularAudiotrack() throws DAOException {
-        return findResultSet(SQL_SELECT_POPULAR, false);
+        return findResultSet(SQL_SELECT_POPULAR);
     }
 
     public List<Audiotrack> findNonBlockedAudiotrackByAlbumId(long albumId) throws DAOException {
-        return findEntityByParameter(SQL_SELECT_BY_ALBUM_ID, String.valueOf(albumId), false);
+        return findEntityByParameter(SQL_SELECT_BY_ALBUM_ID, String.valueOf(albumId));
     }
 
     public List<Audiotrack> findAllAudiotrackByAlbumId(long albumId) throws DAOException {
-        return findEntityByParameter(SQL_SELECT_BY_ALBUM_ID_ADMIN, String.valueOf(albumId), false);
+        return findEntityByParameter(SQL_SELECT_BY_ALBUM_ID_ADMIN, String.valueOf(albumId));
     }
 
     public void updateAudiotrackToUnblocked(long albumId) throws DAOException {
@@ -157,6 +153,14 @@ public class AudiotrackDAO extends AbstractDAO<Audiotrack> {
     }
 
     public List<Audiotrack> findUserAudiotracks(long userId) throws DAOException {
-        return findEntityByParameter(SQL_SELECT_USER_ID, String.valueOf(userId), false);
+        return findEntityByParameter(SQL_SELECT_USER_ID, String.valueOf(userId));
+    }
+
+    public Audiotrack findAllAudiotrackById(long audioId) throws DAOException {
+        List<Audiotrack> list = findEntityByParameter(SQL_SELECT_BY_ID, String.valueOf(audioId));
+        if (list != null && !list.isEmpty()) {
+            return list.get(0);
+        }
+        return null;
     }
 }

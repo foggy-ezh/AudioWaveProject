@@ -11,32 +11,31 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class AbstractDAO <T extends Entity> {
+public abstract class AbstractDAO<T extends Entity> {
     protected ProxyConnection connection;
 
     public AbstractDAO(ProxyConnection connection) {
         this.connection = connection;
     }
 
-    private static final String SQL_SELECT_ROWS ="SELECT FOUND_ROWS();";
+    private static final String SQL_SELECT_ROWS = "SELECT FOUND_ROWS();";
 
     public abstract void remove(T entity) throws DAOException;
-    public abstract void create(T entity) throws DAOException;
-    public abstract void update(T entity) throws DAOException;
-    abstract void parseResultSet(ResultSet resultSet, List<T> list) throws DAOException;
-    abstract void parseFullResultSet(ResultSet resultSet, List<T> list) throws DAOException;
 
-    List<T> findEntityByParameter(String sql, String param, boolean fullParse) throws DAOException{
+    public abstract void create(T entity) throws DAOException;
+
+    public abstract void update(T entity) throws DAOException;
+
+    abstract void parseResultSet(ResultSet resultSet, List<T> list) throws DAOException;
+
+    List<T> findEntityByParameter(String sql, String param) throws DAOException {
         List<T> list = new ArrayList<>();
         PreparedStatement stmt = null;
         try {
             stmt = connection.prepareStatement(sql);
             stmt.setString(1, param);
-            if (fullParse){parseFullResultSet(stmt.executeQuery(),list);}
-            else {
-                parseResultSet(stmt.executeQuery(), list);}
-        }
-        catch (SQLException e) {
+            parseResultSet(stmt.executeQuery(), list);
+        } catch (SQLException e) {
             throw new DAOException(e);
         } finally {
             this.close(stmt);
@@ -54,15 +53,13 @@ public abstract class AbstractDAO <T extends Entity> {
         }
     }
 
-    List<T> findResultSet(String sql, boolean fullParse) throws DAOException {
+    List<T> findResultSet(String sql) throws DAOException {
         List<T> list = new ArrayList<>();
         Statement stmt = null;
         try {
             stmt = connection.createStatement();
             ResultSet resultSet = stmt.executeQuery(sql);
-            if (fullParse){parseFullResultSet(resultSet,list);}
-            else {
-            parseResultSet(resultSet, list);}
+            parseResultSet(resultSet, list);
         } catch (SQLException e) {
             throw new DAOException(e);
         } finally {
@@ -70,6 +67,7 @@ public abstract class AbstractDAO <T extends Entity> {
         }
         return list;
     }
+
     List<String> findFirstLetter(String sql) throws DAOException {
         List<String> list = new ArrayList<>();
         Statement stmt = null;
@@ -97,9 +95,10 @@ public abstract class AbstractDAO <T extends Entity> {
             ResultSet resultSet = stmt.executeQuery();
             parseResultSet(resultSet, list);
             ResultSet rs = stmt.executeQuery(SQL_SELECT_ROWS);
-            int totalCount=0;
-            if(rs.next()){
-                totalCount = rs.getInt(1);}
+            int totalCount = 0;
+            if (rs.next()) {
+                totalCount = rs.getInt(1);
+            }
             return totalCount;
         } catch (SQLException e) {
             throw new DAOException(e);

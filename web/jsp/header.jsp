@@ -34,13 +34,6 @@
                     <li><a href="<c:url value="/AudioWave?command=singer"/>"><fmt:message key="header.singer"/></a></li>
                     <li><a href="<c:url value="/AudioWave?command=album"/>"><fmt:message key="header.album"/></a></li>
                 </ul>
-                <form role="search" class="navbar-form navbar-left">
-                    <div class="form-group">
-                        <input type="text" placeholder="<fmt:message key="header.search"/>" class="form-control">
-                    </div>
-                    <button type="submit" class="btn btn-default search"><img src="../media/images/search.png"
-                                                                              width="19" height="19"/></button>
-                </form>
                 <ul class="nav navbar-nav navbar-right">
                     <c:choose>
                         <c:when test="${role eq 'guest'}">
@@ -54,9 +47,14 @@
                                 </a>
                                 <ul role="menu" class="dropdown-menu">
                                     <c:if test="${role eq 'user'}">
-                                    <li><a href="/AudioWave?command=user_audiotracks"><fmt:message key="header.my.audio"/></a></li>
-                                    <li><a href="#"><fmt:message key="header.settings"/></a></li>
-                                    <li class="divider"></li>
+                                        <li><a href="<c:url value="/AudioWave?command=user_audiotracks"/>"><fmt:message
+                                                key="header.my.audio"/></a></li>
+                                        <li><a href="#" data-target="#changeUserModal" data-toggle="modal">
+                                            <fmt:message key="header.settings"/></a></li>
+                                        <li><a href="/AudioWave?command=get_funds">
+                                            <fmt:message key="header.balance"/>
+                                        </a></li>
+                                        <li class="divider"></li>
                                     </c:if>
                                     <li><a href="<c:url value="/AudioWave?command=log_out"/>">
                                         <fmt:message key="header.exit"/>
@@ -137,6 +135,84 @@
                             <input type="hidden" name="command" value="register"/>
                         </form>
                         <p id="reg-err"></p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal"><fmt:message
+                                key="header.login.close"/></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </c:if>
+        <c:if test="${(role eq 'user') and (not empty currentUser)}">
+        <div class="modal fade" id="changeUserModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog ">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title" id="changeUser1"><fmt:message key="change.user.data"/></h4>
+                    </div>
+                    <div class="modal-body modal-body-reg">
+                        <form name="reg" onsubmit='return regValidate()' method="post" action="AudioWave">
+                            <div class="inline-block">
+                                <span><fmt:message key="header.login.login"/></span><br>
+                                <input type="text" name="login" required title="Use 'a-zA-Z_0-9'" pattern="[\w]*"
+                                       value="${currentUser.login}"><br>
+                                <span><fmt:message key="header.login.password"/></span><br>
+                                <input type="password" name="pwd1" required title="Use at least 6 symbols"><br>
+                                <span><fmt:message key="header.reg.password"/></span><br>
+                                <input type="password" name="pwd2" required><br>
+                            </div>
+                            <div class="inline-block">
+                                <span><fmt:message key="header.mail"/></span><br>
+                                <input type="text" name="mail" required
+                                       value="${currentUser.mail}"><br>
+                                <span><fmt:message key="header.name"/></span><br>
+                                <input type="text" name="firstName" required title="Use 'a-zA-Z'"
+                                       pattern="[a-zA-Z]*" value="${currentUser.firstName}"><br>
+                                <span><fmt:message key="header.last.name"/></span><br>
+                                <input type="text" name="lastName" required title="Use 'a-zA-Z'"
+                                       pattern="[a-zA-Z]*" value="${currentUser.lastName}"><br>
+                            </div>
+                            <br/>
+                            <button type="submit" class="btn btn-primary" id="reg-btn"><fmt:message
+                                    key="button.change"/></button>
+                            <input type="hidden" name="command" value="change_user"/>
+                        </form>
+                        <p id="reg-err"></p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal"><fmt:message
+                                key="header.login.close"/></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </c:if>
+
+
+        <c:if test="${(role eq 'user') and (showFunds)}">
+        <div class="modal fade" id="showFundsModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog modal-sm">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title" id="showFunds1"><fmt:message key="header.balance"/></h4>
+                    </div>
+                    <div class="modal-body modal-body-reg">
+                        <form name="reg" method="post" action="AudioWave">
+                            <span><fmt:message key="show.funds"/></span><br>
+                            <span>${currentUser.amountOfMoney}$</span><br>
+                            <br>
+                            <span><fmt:message key="add.funds"/></span><br>
+                            <input type="text" name="funds" required pattern="^\d{1,6}\.\d{2,2}$"
+                                   title="<fmt:message key="value.between"/> 0.01 and 999999.99"><br>
+                            <button type="submit" class="btn btn-primary" id="reg-btn"><fmt:message
+                                    key="button.submit"/></button>
+                            <input type="hidden" name="command" value="add_funds"/>
+                        </form>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal"><fmt:message

@@ -81,6 +81,10 @@
     $("#AddAudioModal").modal('show');
     <c:remove var="changeAudio"/>
     </c:if>
+    <c:if test="${showFunds}">
+    $("#showFundsModal").modal('show');
+    <c:remove var="showFunds"/>
+    </c:if>
 </script>
 </body>
 </html>
