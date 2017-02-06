@@ -23,8 +23,8 @@ public class ConnectionPool {
 
     private BlockingQueue<ProxyConnection> connections;
 
-    private ConnectionPool(int count){
-        connectionsCount.getAndSet( count > 0 ? count : DEFAULT_COUNT);
+    private ConnectionPool(int count) {
+        connectionsCount.getAndSet(count > 0 ? count : DEFAULT_COUNT);
         connections = new ArrayBlockingQueue<>(connectionsCount.get());
         for (int i = 0; i < connectionsCount.get(); i++) {
             ProxyConnection proxyConnection = new ProxyConnection(new ConnectionCreator().getConnection());
@@ -32,22 +32,11 @@ public class ConnectionPool {
         }
     }
 
-    public static ConnectionPool getInstance(){
-        if (!instanceCreated.get()) {
-            try {
-                LOCK.lock();
-                if (instance == null) {
-                    instance = getInstance(DEFAULT_COUNT);
-                    instanceCreated.getAndSet(true);
-                }
-            } finally {
-                LOCK.unlock();
-            }
-        }
-        return instance;
+    public static ConnectionPool getInstance() {
+        return getInstance(DEFAULT_COUNT);
     }
 
-    public static ConnectionPool getInstance(int count){
+    public static ConnectionPool getInstance(int count) {
         if (!instanceCreated.get()) {
             try {
                 LOCK.lock();
@@ -78,7 +67,7 @@ public class ConnectionPool {
             connections.put(connection);
         } catch (InterruptedException e) {
             LOGGER.log(Level.ERROR, e);
-    }
+        }
     }
 
     public void closeConnections() {
