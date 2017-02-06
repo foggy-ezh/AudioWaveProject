@@ -8,7 +8,6 @@ import java.sql.SQLException;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -18,15 +17,15 @@ public class ConnectionPool {
     private static final int DEFAULT_COUNT = 20;
 
     private static ConnectionPool instance;
-    private static AtomicInteger connectionsCount = new AtomicInteger();
     private static AtomicBoolean instanceCreated = new AtomicBoolean(false);
+    private final int CONNECTIONS_COUNT;
 
     private BlockingQueue<ProxyConnection> connections;
 
     private ConnectionPool(int count) {
-        connectionsCount.getAndSet(count > 0 ? count : DEFAULT_COUNT);
-        connections = new ArrayBlockingQueue<>(connectionsCount.get());
-        for (int i = 0; i < connectionsCount.get(); i++) {
+        CONNECTIONS_COUNT = count > 0 ? count : DEFAULT_COUNT;
+        connections = new ArrayBlockingQueue<>(CONNECTIONS_COUNT);
+        for (int i = 0; i < CONNECTIONS_COUNT; i++) {
             ProxyConnection proxyConnection = new ProxyConnection(new ConnectionCreator().getConnection());
             connections.offer(proxyConnection);
         }
@@ -71,7 +70,7 @@ public class ConnectionPool {
     }
 
     public void closeConnections() {
-        for (int i = 0; i < connectionsCount.get(); i++) {
+        for (int i = 0; i < CONNECTIONS_COUNT; i++) {
             try {
                 connections.take().close();
             } catch (SQLException | InterruptedException e) {
