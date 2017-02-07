@@ -8,14 +8,13 @@
 <head>
     <link rel="shortcut icon" href="../media/images/title_logo.png">
 </head>
-<body>
+<div>
 <%@include file="header.jsp" %>
 <c:if test="${role eq 'user'}">
     <c:choose>
         <c:when test="${empty audiotracks}">
             <div class="mainbox">
                 <h1><fmt:message key="audio.not.found"/></h1>
-            </div>
             </div>
         </c:when>
         <c:otherwise>
@@ -49,6 +48,7 @@
         </c:otherwise>
     </c:choose>
 </c:if>
+</div>
 <%@include file="footer.jsp" %>
 </body>
 </html>

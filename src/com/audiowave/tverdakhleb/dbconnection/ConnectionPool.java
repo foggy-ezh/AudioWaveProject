@@ -15,10 +15,10 @@ public class ConnectionPool {
     private static final Logger LOGGER = LogManager.getLogger();
     private static final Lock LOCK = new ReentrantLock();
     private static final int DEFAULT_COUNT = 20;
+    private final int CONNECTIONS_COUNT;
 
     private static ConnectionPool instance;
     private static AtomicBoolean instanceCreated = new AtomicBoolean(false);
-    private final int CONNECTIONS_COUNT;
 
     private BlockingQueue<ProxyConnection> connections;
 

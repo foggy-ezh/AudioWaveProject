@@ -57,8 +57,8 @@
     <c:set var="regErr" value="false" scope="session"/>
     </c:if>
     <c:if test="${regErr eq 'success'}">
-    $("#myModall").modal('show');
-    document.getElementById("reg-err").innerHTML = '<fmt:message key="header.reg.success"/>';
+    $("#myModal").modal('show');
+    document.getElementById("login-err").innerHTML = '<fmt:message key="header.reg.success"/>';
     <c:set var="regErr" value="false" scope="session"/>
     </c:if>
     $('#myModall').on('show.bs.modal', function () {

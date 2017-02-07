@@ -9,4 +9,39 @@
             <taglib-location>/WEB-INF/taglib/popularaudio.tld</taglib-location>
         </taglib>
     </jsp-config>
+    <error-page>
+        <error-code>400</error-code>
+        <location>/jsp/error/error-page-400.jsp</location>
+    </error-page>
+    <error-page>
+        <error-code>403</error-code>
+        <location>/jsp/error/error-page-403.jsp</location>
+    </error-page>
+    <error-page>
+        <error-code>404</error-code>
+        <location>/jsp/error/error-page-404.jsp</location>
+    </error-page>
+    <error-page>
+        <error-code>408</error-code>
+        <location>/jsp/error/error-page-408.jsp</location>
+    </error-page>
+    <error-page>
+        <error-code>414</error-code>
+        <location>/jsp/error/error-page-414.jsp</location>
+    </error-page>
+    <error-page>
+        <error-code>416</error-code>
+        <location>/jsp/error/error-page-416.jsp</location>
+    </error-page>
+    <error-page>
+        <error-code>429</error-code>
+        <location>/jsp/error/error-page-429.jsp</location>
+    </error-page>
+    <error-page>
+        <error-code>500</error-code>
+        <location>/jsp/error/error-page-500.jsp</location>
+    </error-page>
+    <error-page>
+        <location>/jsp/error/error-page.jsp</location>
+    </error-page>
 </web-app>
